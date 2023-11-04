@@ -21,7 +21,9 @@ add_executable(CreditTask main.cpp
         Lecturer.cpp
         Lecturer.h
         Subject.cpp
-        Subject.h)
+        Subject.h
+        Booking.cpp
+        Booking.h)
 
 # Link against the CppUnit library located in the given directory.
 target_link_directories(CreditTask PRIVATE /opt/homebrew/Cellar/cppunit/1.15.1/lib)
