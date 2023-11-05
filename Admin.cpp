@@ -63,7 +63,6 @@ void Admin::deleteRoom(const std::string& roomNumber) {
         std::cout << "Room " << roomNumber << " not found." << std::endl;
         return;
     }
-
     // Delete the room
     delete *it;
     rooms.erase(it);

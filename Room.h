@@ -18,7 +18,6 @@ private:
 public:
     // Updated constructor to include capacity
     Room(const std::string& number, int cap);
-
     bool isAvailable(float desiredStartTime, float desiredEndTime) const;
     void addBooking(const Booking& booking);
     void setCapacity(int newCapacity) { capacity = newCapacity; } // Setter for capacity

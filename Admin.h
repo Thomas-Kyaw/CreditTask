@@ -23,7 +23,6 @@ public:
     void addRoom(const std::string& roomNumber, int capacity);
     void editRoom(const std::string& roomNumber, int newCapacity);
     void deleteRoom(const std::string& roomNumber);
-
     void approveBooking(const std::string& bookingID);
     void rejectBooking(const std::string& bookingID);
 

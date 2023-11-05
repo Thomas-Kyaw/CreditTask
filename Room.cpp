@@ -23,7 +23,6 @@ bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {
     }
     return true;
 }
-
 void Room::addBooking(const Booking& booking) {
     // Add a booking to the room's list of bookings
     bookings.push_back(booking);

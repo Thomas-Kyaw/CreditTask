@@ -32,7 +32,6 @@ public:
     float getEndTime() const { return endTime; }
     Lecturer* getLecturer() const { return lecturer; }
     Subject* getSubject() const { return subject; }
-
     // Mutators
     void setStatus(BookingStatus newStatus) { status = newStatus; }
 
