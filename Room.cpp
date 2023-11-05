@@ -3,21 +3,32 @@
 //
 
 #include "Room.h"
+#include <algorithm>
 
-Room::Room(const std::string& number) : roomNumber(number) {}
+#include "Room.h"
 
+// Updated constructor implementation
+Room::Room(const std::string& number, int cap) : roomNumber(number), capacity(cap) {
+    // Constructor body, if there's any initialization to do
+}
+
+// ... (Other methods remain unchanged)
 bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {
+    // Check if the room is available during the desired time
     for (const auto& booking : bookings) {
-        // Check for time overlap
-        if (desiredStartTime < booking.getEndTime() && desiredEndTime > booking.getStartTime()) {
-            return false; // The room is not available because there is an overlap
+        // If the desired time overlaps with any approved booking, the room is not available
+        if (!(desiredEndTime <= booking.getStartTime() || desiredStartTime >= booking.getEndTime())) {
+            return false;
         }
     }
-    return true; // The room is available
+    return true;
 }
 
 void Room::addBooking(const Booking& booking) {
+    // Add a booking to the room's list of bookings
     bookings.push_back(booking);
 }
+
+
 
 
