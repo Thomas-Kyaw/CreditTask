@@ -21,6 +21,7 @@ public:
     bool isAvailable(float desiredStartTime, float desiredEndTime) const;
     void addBooking(const Booking& booking);
     void setCapacity(int newCapacity) { capacity = newCapacity; } // Setter for capacity
+    int getCapacity() const { return capacity; }
     std::string getRoomNumber() const { return roomNumber; }
     // Other methods and members as needed
 };
