@@ -13,20 +13,21 @@ class Room {
 private:
     int capacity;
     std::string roomNumber;
-    std::vector<Booking> bookings; // Stores only approved bookings
+    std::vector<Booking*> bookings; // Stores pointers to bookings
 
 public:
-    // Updated constructor to include capacity
     Room(const std::string& number, int cap);
     bool isAvailable(float desiredStartTime, float desiredEndTime) const;
-    void addBooking(const Booking& booking);
-    void setCapacity(int newCapacity) { capacity = newCapacity; } // Setter for capacity
+    void addBooking(Booking* booking); // Changed to take a pointer
+    void removeBooking(Booking* booking); // Method to remove a booking
+    void setCapacity(int newCapacity) { capacity = newCapacity; }
     int getCapacity() const { return capacity; }
     std::string getRoomNumber() const { return roomNumber; }
     // Other methods and members as needed
 };
 
 #endif // ROOM_H
+
 
 
 

@@ -8,6 +8,7 @@
 #include <string>
 #include "Lecturer.h" // Assuming you have a Lecturer class defined
 #include "Subject.h"  // Assuming you have a Subject class defined
+#include "Room.h"     // Include Room if you want to keep a reference to Room in Booking
 
 enum class BookingStatus { PENDING, APPROVED, REJECTED };
 
@@ -20,9 +21,10 @@ private:
     float endTime;
     Lecturer* lecturer; // Pointer to the Lecturer who made the booking
     Subject* subject;   // Pointer to the Subject for which the room was booked
+    Room* room;         // Pointer to the Room that is booked
 
 public:
-    Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj);
+    Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj, Room* rm);
 
     // Accessors
     std::string getBookingID() const { return bookingID; }
@@ -32,6 +34,8 @@ public:
     float getEndTime() const { return endTime; }
     Lecturer* getLecturer() const { return lecturer; }
     Subject* getSubject() const { return subject; }
+    Room* getRoom() const { return room; } // Accessor for the room
+
     // Mutators
     void setStatus(BookingStatus newStatus) { status = newStatus; }
 
@@ -39,5 +43,6 @@ public:
 };
 
 #endif // BOOKING_H
+
 
 

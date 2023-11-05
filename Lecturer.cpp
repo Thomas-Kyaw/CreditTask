@@ -5,6 +5,7 @@
 #include "Lecturer.h"
 #include <iostream>
 #include <sstream> // For string streams
+#include <algorithm> // For std::find_if
 
 Lecturer::Lecturer(const std::string &nameVal, const std::string &id, Room* officeRoom)
         : User(nameVal), lecturerID(id), office(officeRoom) {}
@@ -24,8 +25,8 @@ std::string Lecturer::generateBookingID() {
 
 bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float endTime) {
     if (room->isAvailable(startTime, endTime)) {
-        Booking* newBooking = new Booking(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject);
-        room->addBooking(newBooking);
+        Booking* newBooking = new Booking(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, room);
+        room->addBooking(newBooking); // Dereference the pointer here
         bookings.push_back(newBooking);
         return true;
     } else {
@@ -40,7 +41,6 @@ bool Lecturer::cancelBooking(const std::string& bookingID) {
     });
 
     if (it != bookings.end()) {
-        // Assuming Room has a method to remove a booking
         (*it)->getRoom()->removeBooking(*it);
         delete *it;
         bookings.erase(it);
@@ -60,5 +60,6 @@ std::vector<Room*> Lecturer::searchRoomsByCapacity(const std::vector<Room*>& all
     }
     return suitableRooms;
 }
+
 
 

@@ -8,7 +8,7 @@
 #include "User.h"
 #include "Room.h"
 #include "Subject.h"
-#include "Booking.h" // Include the Booking header
+#include "Booking.h"
 
 #include <vector>
 #include <string>
@@ -31,4 +31,5 @@ public:
 };
 
 #endif // LECTURER_H
+
 
