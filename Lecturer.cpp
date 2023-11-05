@@ -4,8 +4,8 @@
 
 #include "Lecturer.h"
 #include <iostream>
-#include <sstream> // For string streams
-#include <algorithm> // For std::find_if
+#include <algorithm> // For std::find_if and std::remove
+#include <sstream>
 
 Lecturer::Lecturer(const std::string &nameVal, const std::string &id, Room* officeRoom)
         : User(nameVal), lecturerID(id), office(officeRoom) {}
@@ -24,9 +24,11 @@ std::string Lecturer::generateBookingID() {
 }
 
 bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float endTime) {
+    // Assuming isAvailable takes two arguments: startTime and endTime
     if (room->isAvailable(startTime, endTime)) {
+        // Ensure the constructor call matches the definition in Booking.h
         Booking* newBooking = new Booking(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, room);
-        room->addBooking(newBooking); // Dereference the pointer here
+        room->addBooking(newBooking); // Assuming addBooking takes a Booking pointer
         bookings.push_back(newBooking);
         return true;
     } else {
@@ -41,7 +43,7 @@ bool Lecturer::cancelBooking(const std::string& bookingID) {
     });
 
     if (it != bookings.end()) {
-        (*it)->getRoom()->removeBooking(*it);
+        (*it)->getRoom()->removeBooking(*it); // Assuming removeBooking takes a Booking pointer
         delete *it;
         bookings.erase(it);
         return true;
@@ -53,13 +55,20 @@ bool Lecturer::cancelBooking(const std::string& bookingID) {
 
 std::vector<Room*> Lecturer::searchRoomsByCapacity(const std::vector<Room*>& allRooms, int requiredCapacity) {
     std::vector<Room*> suitableRooms;
+    // Example implementation using standard C time functions
+    time_t currentTime = std::time(nullptr); // This gets the current time as a time_t
+    // Convert time_t to your application's time format as needed
+    float currentHours = static_cast<float>(currentTime / 3600); // Example conversion to hours since epoch
+    float oneHourLater = currentHours + 1.0f; // Assuming time is in hours
+
     for (const auto& room : allRooms) {
-        if (room->getCapacity() >= requiredCapacity && room->isAvailable()) {
+        if (room->getCapacity() >= requiredCapacity && room->isAvailable(currentTime, oneHourLater)) {
             suitableRooms.push_back(room);
         }
     }
     return suitableRooms;
 }
+
 
 
 
