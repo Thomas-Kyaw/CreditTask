@@ -6,10 +6,9 @@
 #define BOOKING_H
 
 #include <string>
-#include "Lecturer.h" // Assuming you have a Lecturer class defined
-#include "Subject.h"  // Assuming you have a Subject class defined
-#include "Room.h"     // Include Room if you want to keep a reference to Room in Booking
-
+#include "Subject.h"
+class Lecturer;
+class Room;
 enum class BookingStatus { PENDING, APPROVED, REJECTED };
 
 class Booking {
@@ -43,6 +42,7 @@ public:
 };
 
 #endif // BOOKING_H
+
 
 
 
