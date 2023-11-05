@@ -6,49 +6,39 @@
 #define BOOKING_H
 
 #include <string>
-#include "Room.h"
-#include "Lecturer.h"
+#include "Lecturer.h" // Assuming you have a Lecturer class defined
+#include "Subject.h"  // Assuming you have a Subject class defined
 
-// Enumeration for booking status
-enum class BookingStatus { APPROVED, REJECTED, PENDING };
+enum class BookingStatus { PENDING, APPROVED, REJECTED };
 
 class Booking {
 private:
     std::string bookingID;
-    Room* room;
-    Lecturer* lecturer;
+    std::string roomNumber;
     BookingStatus status;
     float startTime;
     float endTime;
+    Lecturer* lecturer; // Pointer to the Lecturer who made the booking
+    Subject* subject;   // Pointer to the Subject for which the room was booked
 
 public:
-    Booking(const std::string& id, Room* rm, Lecturer* lec, float start, float end);
-    ~Booking();
+    Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj);
 
-    bool checkAvailability(float start, float end) const;
+    // Accessors
+    std::string getBookingID() const { return bookingID; }
+    std::string getRoomNumber() const { return roomNumber; }
+    BookingStatus getStatus() const { return status; }
+    float getStartTime() const { return startTime; }
+    float getEndTime() const { return endTime; }
+    Lecturer* getLecturer() const { return lecturer; }
+    Subject* getSubject() const { return subject; }
 
-    // Accessor and Mutator methods (setters and getters) for each attribute
-    std::string getBookingID() const;
-    void setBookingID(const std::string& id);
+    // Mutators
+    void setStatus(BookingStatus newStatus) { status = newStatus; }
 
-    Room* getRoom() const;
-    void setRoom(Room* rm);
-
-    Lecturer* getLecturer() const;
-    void setLecturer(Lecturer* lec);
-
-    BookingStatus getStatus() const;
-    void setStatus(BookingStatus sts);
-
-    float getStartTime() const;
-    void setStartTime(float start);
-
-    float getEndTime() const;
-    void setEndTime(float end);
-
-    // Additional methods
-    std::string getStatusString() const;
+    // Other methods and members as needed
 };
 
 #endif // BOOKING_H
+
 

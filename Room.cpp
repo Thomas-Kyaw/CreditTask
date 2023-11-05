@@ -4,13 +4,20 @@
 
 #include "Room.h"
 
-Room::Room(const std::string& num, int cap) : roomNumber(num), capacity(cap), isAvailable(true) {}
+Room::Room(const std::string& number) : roomNumber(number) {}
 
-bool Room::checkIfBooked() const {
-    return !isAvailable;
+bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {
+    for (const auto& booking : bookings) {
+        // Check for time overlap
+        if (desiredStartTime < booking.getEndTime() && desiredEndTime > booking.getStartTime()) {
+            return false; // The room is not available because there is an overlap
+        }
+    }
+    return true; // The room is available
 }
 
-void Room::setAvailability(bool availability) {
-    isAvailable = availability;
+void Room::addBooking(const Booking& booking) {
+    bookings.push_back(booking);
 }
+
 

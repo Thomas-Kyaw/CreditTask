@@ -5,23 +5,22 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+#include "Booking.h"
+#include <vector>
 #include <string>
 
 class Room {
-protected:
+private:
     std::string roomNumber;
-    int capacity;
-    bool isAvailable;
+    std::vector<Booking> bookings; // Stores only approved bookings
 
 public:
-    Room(const std::string& num, int cap);
-    virtual ~Room() = default;
-
-    virtual bool bookRoom() = 0;
-    virtual std::string getDetails() const = 0;
-    bool checkIfBooked() const;
-    void setAvailability(bool availability);
+    Room(const std::string& number);
+    bool isAvailable(float desiredStartTime, float desiredEndTime) const;
+    void addBooking(const Booking& booking);
+    // Other methods and members as needed
 };
 
 #endif // ROOM_H
+
 
