@@ -6,10 +6,15 @@
 #include "Building.h"
 #include <algorithm>
 
-// Make sure the constructor definition matches the declaration in Room.h
-Room::Room(const std::string& number, int cap, Building* bldg)
-        : roomNumber(number), capacity(cap), building(bldg) {
+Room::Room(Building* bld, const std::string& number, int cap)
+        : building(bld), roomNumber(number), capacity(cap) {
     // Constructor implementation
+    // Optionally add this room to the building's list of rooms here
+}
+
+Room::~Room() {
+    // Destructor implementation
+    // Handle cleanup if necessary
 }
 
 bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {
@@ -33,6 +38,18 @@ void Room::removeBooking(Booking* booking) {
 Building* Room::getBuilding() const {
     return building;
 }
+void Room::setCapacity(int newCapacity) {
+    capacity = newCapacity;
+}
+
+int Room::getCapacity() const {
+    return capacity;
+}
+
+std::string Room::getRoomNumber() const {
+    return roomNumber;
+}
+
 // Other methods
 
 

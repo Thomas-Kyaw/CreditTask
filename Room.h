@@ -5,30 +5,30 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-// Forward declaration of Building to avoid circular dependency
-class Building;
-
 #include "Booking.h"
 #include <vector>
 #include <string>
 
+// Forward declaration to avoid circular dependency
+class Building;
+
 class Room {
 private:
+    Building* building; // Pointer to the Building this Room belongs to
     int capacity;
     std::string roomNumber;
-    Building* building; // Pointer to the Building this room belongs to
     std::vector<Booking*> bookings; // Stores pointers to bookings
 
 public:
-    // Make sure the constructor declaration includes the Building* parameter
-    Room(const std::string& number, int cap, Building* building);
+    Room(Building* bld, const std::string& number, int cap);
+    ~Room(); // Destructor to handle cleanup if necessary
     bool isAvailable(float desiredStartTime, float desiredEndTime) const;
     void addBooking(Booking* booking);
     void removeBooking(Booking* booking);
     void setCapacity(int newCapacity);
     int getCapacity() const;
     std::string getRoomNumber() const;
-    Building* getBuilding() const; // Method to get the building of the room
+    Building* getBuilding() const; // Getter for the building pointer
 
     // Other methods and members as needed
 };

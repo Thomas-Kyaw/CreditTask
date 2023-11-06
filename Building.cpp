@@ -2,8 +2,12 @@
 // Created by Aung Khant Kyaw on 2023/11/06.
 //
 
+// Building.cpp
+
 #include "Building.h"
+#include "Room.h"
 #include <algorithm>
+#include <stdexcept>
 
 Building::Building(const std::string& code) : buildingCode(code) {}
 
@@ -11,6 +15,7 @@ Building::~Building() {
     for (Room* room : rooms) {
         delete room;
     }
+    rooms.clear();
 }
 
 void Building::addRoom(const std::string& roomNumber, int capacity) {
@@ -20,7 +25,8 @@ void Building::addRoom(const std::string& roomNumber, int capacity) {
     if (it != rooms.end()) {
         throw std::runtime_error("Room already exists.");
     }
-    rooms.push_back(new Room(roomNumber, capacity));
+    // Assuming Room constructor takes a Building pointer as the first argument
+    rooms.push_back(new Room(this, roomNumber, capacity));
 }
 
 void Building::editRoom(const std::string& roomNumber, int newCapacity) {
@@ -55,5 +61,7 @@ void Building::deleteRoom(const std::string& roomNumber) {
         throw std::runtime_error("Room not found.");
     }
 }
-// ... Other method implementations
+
+// ... Other method implementations as needed
+
 
