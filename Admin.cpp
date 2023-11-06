@@ -3,16 +3,18 @@
 //
 
 #include "Admin.h"
+#include "Room.h"
+#include "Building.h"
 #include <iostream>
 #include <algorithm>
 
 Admin::Admin(const std::string &nameVal) : User(nameVal) {}
 
 Admin::~Admin() {
-    for (auto room : rooms) {
-        delete room;
+    for (auto &pair : buildings) {
+        delete pair.second;
     }
-    rooms.clear();
+    buildings.clear();
 
     for (auto booking : pendingBookings) {
         delete booking;
@@ -20,16 +22,36 @@ Admin::~Admin() {
     pendingBookings.clear();
 }
 
+Building* Admin::getBuilding(const std::string& buildingCode) {
+    auto it = buildings.find(buildingCode);
+    if (it != buildings.end()) {
+        return it->second;
+    } else {
+        // If the building doesn't exist, create it and add to the map
+        Building* newBuilding = new Building(buildingCode);
+        buildings[buildingCode] = newBuilding;
+        return newBuilding;
+    }
+}
+
 void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity) {
-    // Implementation to add a room to a building
+    Building* building = getBuilding(buildingCode);
+    building->addRoom(roomNumber, capacity);
 }
 
 void Admin::editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity) {
-    // Implementation to edit a room's details
+    Building* building = getBuilding(buildingCode);
+    Room* room = building->findRoom(roomNumber);
+    if (room) {
+        room->setCapacity(newCapacity);
+    } else {
+        std::cout << "Room not found." << std::endl;
+    }
 }
 
 void Admin::deleteRoom(const std::string& buildingCode, const std::string& roomNumber) {
-    // Implementation to delete a room from a building
+    Building* building = getBuilding(buildingCode);
+    building->deleteRoom(roomNumber);
 }
 
 void Admin::approveBooking(const std::string& bookingID) {
@@ -62,14 +84,13 @@ void Admin::rejectBooking(const std::string& bookingID) {
 }
 
 Room* Admin::findRoom(const std::string& roomNumber) {
-    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const Room* room) {
-        return room->getRoomNumber() == roomNumber;
-    });
-
-    if (it != rooms.end()) {
-        return *it;
+    for (auto& buildingPair : buildings) {
+        Building* building = buildingPair.second;
+        Room* room = building->findRoom(roomNumber);
+        if (room) {
+            return room;
+        }
     }
-
     return nullptr; // Return nullptr if room is not found
 }
 

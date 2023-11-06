@@ -1,19 +1,16 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/04.
-//
-
 #ifndef ADMIN_H
 #define ADMIN_H
 
 #include "User.h"
-#include "Room.h"
+#include "Building.h"
 #include "Booking.h"
 #include <vector>
 #include <string>
+#include <map>
 
 class Admin : public User {
 private:
-    std::vector<Room*> rooms;
+    std::map<std::string, Building*> buildings; // Map of building codes to Building pointers
     std::vector<Booking*> pendingBookings;
 
 public:
@@ -27,11 +24,9 @@ public:
     void rejectBooking(const std::string& bookingID);
 
     // Helper methods
+    Building* getBuilding(const std::string& buildingCode); // Changed to return a pointer
     Room* findRoom(const std::string& roomNumber);
     Booking* findBooking(const std::string& bookingID);
 };
 
 #endif // ADMIN_H
-
-
-

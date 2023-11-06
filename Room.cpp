@@ -3,9 +3,12 @@
 //
 
 #include "Room.h"
+#include "Building.h"
 #include <algorithm>
 
-Room::Room(const std::string& number, int cap) : roomNumber(number), capacity(cap) {
+// Make sure the constructor definition matches the declaration in Room.h
+Room::Room(const std::string& number, int cap, Building* bldg)
+        : roomNumber(number), capacity(cap), building(bldg) {
     // Constructor implementation
 }
 
@@ -26,6 +29,10 @@ void Room::removeBooking(Booking* booking) {
     bookings.erase(std::remove(bookings.begin(), bookings.end(), booking), bookings.end());
 }
 
+// Make sure the getBuilding() definition matches the declaration in Room.h
+Building* Room::getBuilding() const {
+    return building;
+}
 // Other methods
 
 
