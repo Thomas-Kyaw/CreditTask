@@ -7,6 +7,7 @@
 
 #include "Room.h"
 #include <list>
+#include <string>
 
 class ComputerLab : public Room {
     std::string operatingSystem;
@@ -14,10 +15,10 @@ class ComputerLab : public Room {
     bool hasPrintingFacility;
 
 public:
-    ComputerLab(const std::string& num, int cap, const std::string& os, const std::list<std::string>& software, bool printingFacility);
-    bool bookRoom() override;
-    std::string getDetails() const override;
+    ComputerLab(Building* bld, const std::string& num, int cap, const std::string& os, const std::list<std::string>& software, bool printingFacility);
+    virtual std::string GetDetails() const override;
 };
 
 #endif // COMPUTERLAB_H
+
 

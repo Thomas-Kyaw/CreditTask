@@ -7,13 +7,11 @@
 MeetingRoom::MeetingRoom(const std::string& num, int cap, bool conferenceEquip, bool whiteboard, const std::string& seating)
         : Room(num, cap), hasConferenceCallEquipment(conferenceEquip), hasWhiteboard(whiteboard), seatingArrangement(seating) {}
 
-bool MeetingRoom::bookRoom() {
 
-    return false;
-}
-
-std::string MeetingRoom::getDetails() const {
-
-    return "";
+std::string MeetingRoom::GetDetails() const {
+    std::string details = Room::GetDetails();
+    details += "Type: Meeting Room\n";
+    // Add more details specific to MeetingRoom if necessary
+    return details;
 }
 

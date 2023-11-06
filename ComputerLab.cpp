@@ -7,13 +7,11 @@
 ComputerLab::ComputerLab(const std::string& num, int cap, const std::string& os, const std::list<std::string>& software, bool printingFacility)
         : Room(num, cap), operatingSystem(os), softwareInstalled(software), hasPrintingFacility(printingFacility) {}
 
-bool ComputerLab::bookRoom() {
 
-    return false; // Placeholder
-}
-
-std::string ComputerLab::getDetails() const {
-
-    return ""; // Placeholder
+std::string ComputerLab::GetDetails() const {
+    std::string details = Room::GetDetails();
+    details += "Type: Computer Lab\n";
+    // Add more details specific to ComputerLab if necessary
+    return details;
 }
 

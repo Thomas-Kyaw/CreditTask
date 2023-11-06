@@ -50,6 +50,12 @@ std::string Room::getRoomNumber() const {
     return roomNumber;
 }
 
+std::string Room::GetDetails() const {
+    std::string details = "Room Number: " + roomNumber + "\n";
+    details += "Capacity: " + std::to_string(capacity) + "\n";
+    // Add more details if necessary
+    return details;
+}
 // Other methods
 
 

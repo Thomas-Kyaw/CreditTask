@@ -14,8 +14,7 @@ class MeetingRoom : public Room {
 
 public:
     MeetingRoom(const std::string& num, int cap, bool conferenceEquip, bool whiteboard, const std::string& seating);
-    bool bookRoom() override;
-    std::string getDetails() const override;
+    virtual std::string GetDetails() const override;
 };
 
 #endif // MEETINGROOM_H

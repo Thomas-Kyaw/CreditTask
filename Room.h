@@ -30,6 +30,7 @@ public:
     std::string getRoomNumber() const;
     Building* getBuilding() const; // Getter for the building pointer
 
+    virtual std::string GetDetails() const;
     // Other methods and members as needed
 };
 
