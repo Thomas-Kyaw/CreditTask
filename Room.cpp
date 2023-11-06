@@ -6,7 +6,7 @@
 #include <algorithm>
 
 Room::Room(const std::string& number, int cap) : roomNumber(number), capacity(cap) {
-    // Constructor body
+    // Constructor implementation
 }
 
 bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {

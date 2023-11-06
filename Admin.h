@@ -20,9 +20,9 @@ public:
     Admin(const std::string &name);
     ~Admin();
 
-    void addRoom(const std::string& roomNumber, int capacity);
-    void editRoom(const std::string& roomNumber, int newCapacity);
-    void deleteRoom(const std::string& roomNumber);
+    void addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity);
+    void editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity);
+    void deleteRoom(const std::string& buildingCode, const std::string& roomNumber);
     void approveBooking(const std::string& bookingID);
     void rejectBooking(const std::string& bookingID);
 
