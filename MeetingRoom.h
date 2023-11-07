@@ -13,7 +13,7 @@ class MeetingRoom : public Room {
     std::string seatingArrangement;
 
 public:
-    MeetingRoom(const std::string& num, int cap, bool conferenceEquip, bool whiteboard, const std::string& seating);
+    MeetingRoom(Building* bld, const std::string& number, int cap, bool conferenceCall, bool whiteboard);
     virtual std::string GetDetails() const override;
 };
 

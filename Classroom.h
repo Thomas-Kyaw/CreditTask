@@ -14,7 +14,7 @@ private:
     ClassroomType roomType;
 
 public:
-    Classroom(const std::string& number, int cap, ClassroomType type);
+    Classroom(Building* bld, const std::string& number, int cap, ClassroomType type);
     virtual std::string GetDetails() const override;
 };
 

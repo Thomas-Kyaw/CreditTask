@@ -4,8 +4,10 @@
 
 #include "Classroom.h"
 
-Classroom::Classroom(const std::string& number, int cap, ClassroomType type)
-        : Room(number, cap), roomType(type) {}
+Classroom::Classroom(Building* bld, const std::string& number, int cap, ClassroomType type)
+        : Room(bld, number, cap), roomType(type) {
+    // Additional initialization for Classroom if needed
+}
 
 std::string Classroom::GetDetails() const {
     std::string details = Room::GetDetails();

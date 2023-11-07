@@ -2,16 +2,21 @@
 // Created by Aung Khant Kyaw on 2023/11/04.
 //
 
+// MeetingRoom.cpp
 #include "MeetingRoom.h"
 
-MeetingRoom::MeetingRoom(const std::string& num, int cap, bool conferenceEquip, bool whiteboard, const std::string& seating)
-        : Room(num, cap), hasConferenceCallEquipment(conferenceEquip), hasWhiteboard(whiteboard), seatingArrangement(seating) {}
-
+MeetingRoom::MeetingRoom(Building* bld, const std::string& number, int cap, bool conferenceCall, bool whiteboard)
+        : Room(bld, number, cap), hasConferenceCallEquipment(conferenceCall), hasWhiteboard(whiteboard){
+    // Additional initialization for MeetingRoom if needed
+}
 
 std::string MeetingRoom::GetDetails() const {
     std::string details = Room::GetDetails();
     details += "Type: Meeting Room\n";
-    // Add more details specific to MeetingRoom if necessary
+    details += "Conference Call Equipment: " + std::string(hasConferenceCallEquipment ? "Yes" : "No") + "\n";
+    details += "Whiteboard: " + std::string(hasWhiteboard ? "Yes" : "No") + "\n";
+    details += "Seating Arrangement: " + seatingArrangement + "\n";
     return details;
 }
+
 
