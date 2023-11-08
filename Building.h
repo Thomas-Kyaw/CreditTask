@@ -12,7 +12,7 @@
 class Building {
 private:
     std::string buildingCode;
-    std::vector<Room*> rooms;
+    std::vector<std::unique_ptr<Room>> rooms;
 
 public:
     Building(const std::string& code);
