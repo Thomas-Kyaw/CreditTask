@@ -18,14 +18,14 @@ Building::~Building() {
     // unique_ptr's will automatically delete the Room objects そうらしい
 }
 
-void Building::addRoom(const std::string& roomNumber, int capacity) {
-    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& room) {
-        return room->getRoomNumber() == roomNumber;
+void Building::addRoom(Room* room) {
+    // Check if the room already exists and add it to the list
+    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& existingRoom) {
+        return existingRoom.get() == room;
     });
-    if (it != rooms.end()) {
-        throw std::runtime_error("Room already exists.");
+    if (it == rooms.end()) {
+        rooms.push_back(std::unique_ptr<Room>(room));
     }
-    rooms.push_back(std::make_unique<Room>(this, roomNumber, capacity));
 }
 
 void Building::editRoom(const std::string& roomNumber, int newCapacity) {

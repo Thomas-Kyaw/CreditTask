@@ -8,13 +8,17 @@
 
 Room::Room(Building* bld, const std::string& number, int cap)
         : building(bld), roomNumber(number), capacity(cap) {
-    // Constructor implementation
-    // Optionally add this room to the building's list of rooms here
+    // Optionally add this room to the building's list of rooms
+    if (building) {
+        building->addRoom(this);
+    }
 }
 
 Room::~Room() {
-    // Destructor implementation
-    // Handle cleanup if necessary
+    for (auto& booking : bookings) {
+        delete booking;
+    }
+    bookings.clear();
 }
 
 bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {

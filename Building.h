@@ -17,7 +17,7 @@ private:
 public:
     Building(const std::string& code);
     ~Building();
-    void addRoom(const std::string& roomNumber, int capacity);
+    void addRoom(Room* room);
     void editRoom(const std::string& roomNumber, int newCapacity);
     Room* findRoom(const std::string& roomNumber);
     void deleteRoom(const std::string& roomNumber);
