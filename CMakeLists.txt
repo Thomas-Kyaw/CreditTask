@@ -27,7 +27,12 @@ add_executable(CreditTask main.cpp
         Building.cpp
         Building.h
         Classroom.cpp
-        Classroom.h)
+        Classroom.h
+        RoomTest.cpp
+        BuildingTest.cpp
+        ClassroomTest.cpp
+        ComputerLabTest.cpp
+        MeetingRoomTest.cpp)
 
 # Link against the CppUnit library located in the given directory.
 target_link_directories(CreditTask PRIVATE /opt/homebrew/Cellar/cppunit/1.15.1/lib)
