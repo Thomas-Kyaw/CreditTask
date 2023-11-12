@@ -36,7 +36,8 @@ Building* Admin::getBuilding(const std::string& buildingCode) {
 
 void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity) {
     Building* building = getBuilding(buildingCode);
-    building->addRoom(roomNumber, capacity);
+    Room* newRoom = new Room(building, roomNumber, capacity);
+    building->addRoom(newRoom);
 }
 
 void Admin::editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity) {

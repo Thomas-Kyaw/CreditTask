@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(/opt/homebrew/Cellar/cppunit/1.15.1/include)
 
 # Specify the executable and the source files.
-add_executable(CreditTask main.cpp
+add_executable(CreditTask main.cpp TestRunner.cpp
         Room.cpp
         Room.h
         MeetingRoom.cpp
@@ -32,7 +32,14 @@ add_executable(CreditTask main.cpp
         BuildingTest.cpp
         ClassroomTest.cpp
         ComputerLabTest.cpp
-        MeetingRoomTest.cpp)
+        MeetingRoomTest.cpp
+        TestRunner.cpp
+        RoomTest.h
+        BuildingTest.h
+        BuildingTest.h
+        ClassroomTest.h
+        ComputerLabTest.h
+        MeetingRoomTest.h)
 
 # Link against the CppUnit library located in the given directory.
 target_link_directories(CreditTask PRIVATE /opt/homebrew/Cellar/cppunit/1.15.1/lib)

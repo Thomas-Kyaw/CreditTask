@@ -19,4 +19,3 @@ std::string MeetingRoom::GetDetails() const {
     return details;
 }
 
-
