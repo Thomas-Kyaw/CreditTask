@@ -20,11 +20,11 @@ private:
     float endTime;
     Lecturer* lecturer; // Pointer to the Lecturer who made the booking
     Subject* subject;   // Pointer to the Subject for which the room was booked
-    Room* room;         // Pointer to the Room that is booked
+    std::weak_ptr<Room> room;        // Pointer to the Room that is booked
 
 public:
-    Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj, Room* rm);
-
+    Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj, std::shared_ptr<Room> rm);
+    void updateOnRoomDeletion();
     // Accessors
     std::string getBookingID() const { return bookingID; }
     std::string getRoomNumber() const { return roomNumber; }
@@ -33,7 +33,7 @@ public:
     float getEndTime() const { return endTime; }
     Lecturer* getLecturer() const { return lecturer; }
     Subject* getSubject() const { return subject; }
-    Room* getRoom() const { return room; } // Accessor for the room
+    Room* getRoom() const { return room.lock().get();} // Accessor for the room
 
     // Mutators
     void setStatus(BookingStatus newStatus) { status = newStatus; }

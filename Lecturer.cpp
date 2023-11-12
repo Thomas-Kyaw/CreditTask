@@ -1,33 +1,28 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/04.
-//
-
 #include "Lecturer.h"
 #include "Booking.h"
+#include "Building.h"
 #include <iostream>
-#include <algorithm> // For std::find_if and std::remove
+#include <algorithm>
 #include <sstream>
 
 Lecturer::Lecturer(const std::string &nameVal, const std::string &id, Room* officeRoom)
         : User(nameVal), lecturerID(id), office(officeRoom) {}
 
 Lecturer::~Lecturer() {
-    for (auto booking : bookings) {
-        delete booking;
-    }
+    // No need to delete bookings, shared_ptr will handle it
 }
 
 std::string Lecturer::generateBookingID() {
-    static int idCounter = 0; // This will increment with each call
+    static int idCounter = 0;
     std::stringstream ss;
-    ss << "BKG" << ++idCounter; // Prefix with BKG and append the counter
+    ss << "BKG" << ++idCounter;
     return ss.str();
 }
 
 bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float endTime) {
     if (room->isAvailable(startTime, endTime)) {
-        Booking* newBooking = new Booking(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, room);
-        room->addBooking(newBooking); // Assuming addBooking takes a Booking pointer
+        auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, room);
+        room->addBooking(newBooking.get()); // Pass raw pointer to Room
         bookings.push_back(newBooking);
         return true;
     } else {
@@ -37,13 +32,12 @@ bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float end
 }
 
 bool Lecturer::cancelBooking(const std::string& bookingID) {
-    auto it = std::find_if(bookings.begin(), bookings.end(), [&](const Booking* booking) {
+    auto it = std::find_if(bookings.begin(), bookings.end(), [&](const std::shared_ptr<Booking>& booking) {
         return booking->getBookingID() == bookingID;
     });
 
     if (it != bookings.end()) {
-        (*it)->getRoom()->removeBooking(*it); // Assuming removeBooking takes a Booking pointer
-        delete *it;
+        (*it)->getRoom()->removeBooking(it->get()); // Pass raw pointer to Room
         bookings.erase(it);
         return true;
     } else {
@@ -61,5 +55,3 @@ std::vector<Room*> Lecturer::searchRoomsByCapacity(const std::vector<Room*>& all
     }
     return suitableRooms;
 }
-
-

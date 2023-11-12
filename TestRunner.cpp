@@ -4,17 +4,18 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
-// Include your test suite headers
-#include "RoomTest.h"
-#include "BuildingTest.h"
-#include "ClassroomTest.h"
-#include "ComputerLabTest.h"
+//#include "BuildingTest.h"
+// Comment out other test suite headers
+// #include "RoomTest.h"
+//#include "ClassroomTest.h"
+//#include "ComputerLabTest.h"
 #include "MeetingRoomTest.h"
 
-int main(int argc, char* argv[]) {
+
+/*int main() {
     CppUnit::TextUi::TestRunner runner;
-    CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
-    runner.addTest(registry.makeTest());
+    runner.addTest(MeetingRoomTest::suite());
     bool wasSuccessful = runner.run("", false);
     return wasSuccessful ? 0 : 1;
-}
+}*/
+

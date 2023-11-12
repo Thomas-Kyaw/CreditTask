@@ -7,15 +7,16 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <memory>
 
 class Admin : public User {
 private:
-    std::map<std::string, Building*> buildings; // Map of building codes to Building pointers
-    std::vector<Booking*> pendingBookings;
+    std::map<std::string, std::shared_ptr<Building>> buildings; // Map of building codes to shared_ptr of Building
+    std::vector<std::shared_ptr<Booking>> pendingBookings; // Changed to vector of shared_ptr of Booking
 
 public:
     Admin(const std::string &name);
-    ~Admin();
+    // Removed the destructor as it's not needed with smart pointers
 
     void addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity);
     void editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity);
@@ -24,9 +25,9 @@ public:
     void rejectBooking(const std::string& bookingID);
 
     // Helper methods
-    Building* getBuilding(const std::string& buildingCode); // Changed to return a pointer
-    Room* findRoom(const std::string& roomNumber);
-    Booking* findBooking(const std::string& bookingID);
+    std::shared_ptr<Building> getBuilding(const std::string& buildingCode); // Changed to return shared_ptr
+    Room* findRoom(const std::string& roomNumber); // Changed to return shared_ptr
+    std::shared_ptr<Booking> findBooking(const std::string& bookingID); // Changed to return shared_ptr
 };
 
 #endif // ADMIN_H

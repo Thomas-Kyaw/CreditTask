@@ -1,30 +1,16 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/06.
-//
-
-// Building.cpp
-
-// Building.cpp
-
 #include "Building.h"
-#include "Room.h"
 #include <algorithm>
 #include <stdexcept>
-#include <memory> // For std::unique_ptr
 
 Building::Building(const std::string& code) : buildingCode(code) {}
 
-Building::~Building() {
-    // unique_ptr's will automatically delete the Room objects そうらしい
-}
-
-void Building::addRoom(Room* room) {
+void Building::addRoom(std::unique_ptr<Room> room) {
     // Check if the room already exists and add it to the list
     auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& existingRoom) {
-        return existingRoom.get() == room;
+        return existingRoom->getRoomNumber() == room->getRoomNumber();
     });
     if (it == rooms.end()) {
-        rooms.push_back(std::unique_ptr<Room>(room));
+        rooms.push_back(std::move(room)); // Use std::move to transfer ownership
     }
 }
 
@@ -61,4 +47,3 @@ void Building::deleteRoom(const std::string& roomNumber) {
 }
 
 // ... Other method implementations as needed
-

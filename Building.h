@@ -1,28 +1,24 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/06.
-//
-
 #ifndef BUILDING_H
 #define BUILDING_H
 
 #include "Room.h"
 #include <string>
 #include <vector>
+#include <memory> // For std::unique_ptr
 
 class Building {
 private:
     std::string buildingCode;
-    std::vector<std::unique_ptr<Room>> rooms;
+    std::vector<std::unique_ptr<Room>> rooms; // Using unique_ptr for Room objects
 
 public:
     Building(const std::string& code);
-    ~Building();
-    void addRoom(Room* room);
+    ~Building(); // Destructor is not needed as unique_ptr handles deletion
+    void addRoom(std::unique_ptr<Room> room); // Changed to take unique_ptr
     void editRoom(const std::string& roomNumber, int newCapacity);
-    Room* findRoom(const std::string& roomNumber);
+    Room* findRoom(const std::string& roomNumber); // Returns raw pointer
     void deleteRoom(const std::string& roomNumber);
     // ... Other methods
 };
 
 #endif // BUILDING_H
-

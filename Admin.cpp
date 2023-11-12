@@ -1,47 +1,31 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/04.
-//
-
 #include "Admin.h"
 #include "Room.h"
 #include "Building.h"
 #include <iostream>
 #include <algorithm>
+#include <memory>
 
 Admin::Admin(const std::string &nameVal) : User(nameVal) {}
 
-Admin::~Admin() {
-    for (auto &pair : buildings) {
-        delete pair.second;
-    }
-    buildings.clear();
-
-    for (auto booking : pendingBookings) {
-        delete booking;
-    }
-    pendingBookings.clear();
-}
-
-Building* Admin::getBuilding(const std::string& buildingCode) {
+std::shared_ptr<Building> Admin::getBuilding(const std::string& buildingCode) {
     auto it = buildings.find(buildingCode);
     if (it != buildings.end()) {
         return it->second;
     } else {
-        // If the building doesn't exist, create it and add to the map
-        Building* newBuilding = new Building(buildingCode);
+        auto newBuilding = std::make_shared<Building>(buildingCode);
         buildings[buildingCode] = newBuilding;
         return newBuilding;
     }
 }
 
 void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity) {
-    Building* building = getBuilding(buildingCode);
-    Room* newRoom = new Room(building, roomNumber, capacity);
-    building->addRoom(newRoom);
+    auto building = getBuilding(buildingCode);
+    auto newRoom = std::make_unique<Room>(building.get(), roomNumber, capacity);
+    building->addRoom(std::move(newRoom));
 }
 
 void Admin::editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity) {
-    Building* building = getBuilding(buildingCode);
+    auto building = getBuilding(buildingCode);
     Room* room = building->findRoom(roomNumber);
     if (room) {
         room->setCapacity(newCapacity);
@@ -51,19 +35,25 @@ void Admin::editRoom(const std::string& buildingCode, const std::string& roomNum
 }
 
 void Admin::deleteRoom(const std::string& buildingCode, const std::string& roomNumber) {
-    Building* building = getBuilding(buildingCode);
-    building->deleteRoom(roomNumber);
+    auto building = buildings.find(buildingCode);
+    if (building != buildings.end()) {
+        auto room = building->second->findRoom(roomNumber);
+        if (room) {
+            room->notifyBookingsRoomDeletion();
+        }
+        building->second->deleteRoom(roomNumber);
+    }
 }
 
 void Admin::approveBooking(const std::string& bookingID) {
     auto it = std::find_if(pendingBookings.begin(), pendingBookings.end(),
-                           [&](const Booking* booking) { return booking->getBookingID() == bookingID; });
+                           [&](const std::shared_ptr<Booking>& booking) { return booking->getBookingID() == bookingID; });
 
     if (it != pendingBookings.end() && (*it)->getStatus() == BookingStatus::PENDING) {
-        Room* room = findRoom((*it)->getRoomNumber()); // Assuming a method to find a room by number
+        auto room = findRoom((*it)->getRoomNumber());
         if (room && room->isAvailable((*it)->getStartTime(), (*it)->getEndTime())) {
             (*it)->setStatus(BookingStatus::APPROVED);
-            room->addBooking(*it); // Assuming Room class has an addBooking method
+            room->addBooking(it->get());
         } else {
             std::cout << "Cannot approve booking: Room is not available at the requested time." << std::endl;
         }
@@ -74,7 +64,7 @@ void Admin::approveBooking(const std::string& bookingID) {
 
 void Admin::rejectBooking(const std::string& bookingID) {
     auto it = std::find_if(pendingBookings.begin(), pendingBookings.end(),
-                           [&](const Booking* booking) { return booking->getBookingID() == bookingID; });
+                           [&](const std::shared_ptr<Booking>& booking) { return booking->getBookingID() == bookingID; });
 
     if (it != pendingBookings.end()) {
         (*it)->setStatus(BookingStatus::REJECTED);
@@ -86,8 +76,7 @@ void Admin::rejectBooking(const std::string& bookingID) {
 
 Room* Admin::findRoom(const std::string& roomNumber) {
     for (auto& buildingPair : buildings) {
-        Building* building = buildingPair.second;
-        Room* room = building->findRoom(roomNumber);
+        Room* room = buildingPair.second->findRoom(roomNumber);
         if (room) {
             return room;
         }
@@ -95,9 +84,10 @@ Room* Admin::findRoom(const std::string& roomNumber) {
     return nullptr; // Return nullptr if room is not found
 }
 
-Booking* Admin::findBooking(const std::string& bookingID) {
+
+std::shared_ptr<Booking> Admin::findBooking(const std::string& bookingID) {
     auto it = std::find_if(pendingBookings.begin(), pendingBookings.end(),
-                           [&](const Booking* booking) { return booking->getBookingID() == bookingID; });
+                           [&](const std::shared_ptr<Booking>& booking) { return booking->getBookingID() == bookingID; });
 
     if (it != pendingBookings.end()) {
         return *it;
@@ -105,4 +95,3 @@ Booking* Admin::findBooking(const std::string& bookingID) {
 
     return nullptr; // Return nullptr if booking is not found
 }
-

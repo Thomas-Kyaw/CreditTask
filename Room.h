@@ -25,6 +25,7 @@ public:
     bool isAvailable(float desiredStartTime, float desiredEndTime) const;
     void addBooking(Booking* booking);
     void removeBooking(Booking* booking);
+    void notifyBookingsRoomDeletion();
     void setCapacity(int newCapacity);
     int getCapacity() const;
     std::string getRoomNumber() const;

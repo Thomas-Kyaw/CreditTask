@@ -1,7 +1,3 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/04.
-//
-
 #ifndef LECTURER_H
 #define LECTURER_H
 
@@ -9,28 +5,26 @@
 #include "Room.h"
 #include "Subject.h"
 #include "Booking.h"
-
+#include "Building.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 class Lecturer : public User {
 private:
     std::string lecturerID;
     Room* office;
     std::vector<Subject*> subjects;
-    std::vector<Booking*> bookings; // Vector to track the lecturer's bookings
+    std::vector<std::shared_ptr<Booking>> bookings; // Use shared_ptr for bookings
 
 public:
     Lecturer(const std::string &name, const std::string &id, Room* officeRoom);
     ~Lecturer();
 
-    std::string generateBookingID(); // Function to generate a unique booking ID
+    std::string generateBookingID();
     bool bookRoom(Room* room, Subject* subject, float startTime, float endTime);
-    bool cancelBooking(const std::string& bookingID); // Changed to take a booking ID
+    bool cancelBooking(const std::string& bookingID);
     std::vector<Room*> searchRoomsByCapacity(const std::vector<Room*>& allRooms, int requiredCapacity);
 };
 
 #endif // LECTURER_H
-
-
-

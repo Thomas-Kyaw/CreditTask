@@ -5,13 +5,13 @@
 #include "Room.h"
 #include "Building.h"
 #include <algorithm>
+#include <vector>
+#include <iostream>
+#include <memory>
 
 Room::Room(Building* bld, const std::string& number, int cap)
         : building(bld), roomNumber(number), capacity(cap) {
-    // Optionally add this room to the building's list of rooms
-    if (building) {
-        building->addRoom(this);
-    }
+    // The room is added to the building in Admin::addRoom
 }
 
 Room::~Room() {
@@ -31,13 +31,19 @@ bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {
 }
 
 void Room::addBooking(Booking* booking) {
-    bookings.push_back(booking);
+    bookings.push_back(booking); // Assuming bookings is std::vector<Booking*>
 }
 
 void Room::removeBooking(Booking* booking) {
-    bookings.erase(std::remove(bookings.begin(), bookings.end(), booking), bookings.end());
+    bookings.erase(std::remove_if(bookings.begin(), bookings.end(),
+                                  [booking](const Booking* b) { return b == booking; }), bookings.end());
 }
 
+void Room::notifyBookingsRoomDeletion() {
+    for (auto& booking : bookings) {
+        booking->updateOnRoomDeletion();
+    }
+}
 // Make sure the getBuilding() definition matches the declaration in Room.h
 Building* Room::getBuilding() const {
     return building;
