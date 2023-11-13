@@ -22,8 +22,8 @@ std::string Lecturer::generateBookingID() {
 bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float endTime) {
     if (room->isAvailable(startTime, endTime)) {
         auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, room);
-        room->addBooking(newBooking.get()); // Pass raw pointer to Room
-        bookings.push_back(newBooking);
+        room->addBooking(newBooking.get()); // Pass the raw pointer
+        bookings.push_back(newBooking); // Store the shared_ptr
         return true;
     } else {
         std::cout << "Room is not available for the requested time slot." << std::endl;

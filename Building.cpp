@@ -46,4 +46,13 @@ void Building::deleteRoom(const std::string& roomNumber) {
     }
 }
 
+std::shared_ptr<Room> Building::getRoomSharedPtr(const std::string& roomNumber) {
+    Room* room = findRoom(roomNumber);
+    if (room) {
+        return std::shared_ptr<Room>(room, [](Room*){/* do not delete the room */});
+    }
+    return nullptr;
+}
+
+
 // ... Other method implementations as needed

@@ -18,6 +18,7 @@ public:
     void editRoom(const std::string& roomNumber, int newCapacity);
     Room* findRoom(const std::string& roomNumber); // Returns raw pointer
     void deleteRoom(const std::string& roomNumber);
+    std::shared_ptr<Room> getRoomSharedPtr(const std::string& roomNumber);
     // ... Other methods
 };
 
