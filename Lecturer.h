@@ -25,6 +25,7 @@ public:
     bool bookRoom(Room* room, Subject* subject, float startTime, float endTime);
     bool cancelBooking(const std::string& bookingID);
     std::vector<Room*> searchRoomsByCapacity(const std::vector<Room*>& allRooms, int requiredCapacity);
+    std::string getName() const;
 };
 
 #endif // LECTURER_H

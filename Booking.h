@@ -39,6 +39,7 @@ public:
     void setStatus(BookingStatus newStatus) { status = newStatus; }
 
     // Other methods and members as needed
+    std::string getDetails() const;
 };
 
 #endif // BOOKING_H

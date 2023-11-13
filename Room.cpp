@@ -15,10 +15,10 @@ Room::Room(Building* bld, const std::string& number, int cap)
 }
 
 Room::~Room() {
-    for (auto& booking : bookings) {
+    /*for (auto& booking : bookings) {
         delete booking;
     }
-    bookings.clear();
+    bookings.clear();*/
 }
 
 bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {

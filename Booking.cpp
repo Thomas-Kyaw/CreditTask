@@ -24,3 +24,13 @@ void Booking::updateOnRoomDeletion() {
     room.reset();
     // Additional shit goes here
 }
+
+std::string Booking::getDetails() const {
+    std::string details = "Booking Details:\n";
+    details += "Room: " + roomNumber + "\n";
+    details += "Time: " + std::to_string(startTime) + " - " + std::to_string(endTime) + "\n";
+    details += "Lecturer: " + lecturer->getName() + "\n";
+    details += "Subject: " + subject->getDetails() + "\n";
+    return details;
+}
+

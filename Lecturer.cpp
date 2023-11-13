@@ -61,3 +61,8 @@ std::vector<Room*> Lecturer::searchRoomsByCapacity(const std::vector<Room*>& all
     }
     return suitableRooms;
 }
+
+std::string Lecturer::getName() const {
+    return name;
+}
+
