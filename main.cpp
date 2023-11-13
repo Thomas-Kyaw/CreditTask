@@ -7,7 +7,7 @@
     #include <iostream>
     #include <memory>
 
-    int main() {
+    /*int main() {
         // Admin for managing rooms and buildings
         Admin admin("Admin1");
 
@@ -51,3 +51,4 @@
 
         return 0;
     }
+*/

@@ -12,10 +12,10 @@
 #include "MeetingRoomTest.h"
 
 
-/*int main() {
+int main() {
     CppUnit::TextUi::TestRunner runner;
     runner.addTest(MeetingRoomTest::suite());
     bool wasSuccessful = runner.run("", false);
     return wasSuccessful ? 0 : 1;
-}*/
+}
 
