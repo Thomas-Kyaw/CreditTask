@@ -23,6 +23,7 @@ public:
     void deleteRoom(const std::string& buildingCode, const std::string& roomNumber);
     void approveBooking(const std::string& bookingID);
     void rejectBooking(const std::string& bookingID);
+    void deleteBuilding(const std::string& buildingCode);
 
     // Helper methods
     std::shared_ptr<Building> getBuilding(const std::string& buildingCode); // Changed to return shared_ptr

@@ -8,29 +8,29 @@
 #include <memory>
 
 int main() {
-    // Use a unique_ptr for automatic deallocation of Building
-    auto buildingPtr = std::make_unique<Building>("B1");
+    // Admin for managing rooms and buildings
+    Admin admin("Admin1");
 
-    // Create Room as a unique_ptr and add it to the building
-    auto roomPtr = std::make_unique<Room>(buildingPtr.get(), "R101", 30);
-    Room* roomRawPtr = roomPtr.get(); // Get raw pointer for other uses
-    buildingPtr->addRoom(std::move(roomPtr)); // Transfer ownership to Building
+    // Admin creates a building
+    auto buildingPtr = admin.getBuilding("B1");
+
+    // Admin adds a room to the building
+    admin.addRoom("B1", "R101", 30);
+
+    // Retrieve the room pointer for further use
+    Room* roomRawPtr = buildingPtr->findRoom("R101");
 
     Lecturer lecturer("Dr. Smith", "Lec1", roomRawPtr);
     Subject subject("CS101", "Computer Science");
 
     // Create Booking with shared_ptr to Room
-    auto sharedRoomPtr = std::make_shared<Room>(*roomRawPtr); // Create a shared_ptr from the raw pointer
+    auto sharedRoomPtr = std::make_shared<Room>(*roomRawPtr);
     Booking booking("B1", "R101", 9.0f, 10.0f, &lecturer, &subject, sharedRoomPtr);
 
     std::cout << "Booking created for room: " << sharedRoomPtr->getRoomNumber() << std::endl;
 
-    // Admin for managing rooms and buildings
-    Admin admin("Admin1");
-
     // Admin adds another room
-    auto anotherRoomPtr = std::make_unique<Room>(buildingPtr.get(), "R102", 40);
-    buildingPtr->addRoom(std::move(anotherRoomPtr));
+    admin.addRoom("B1", "R102", 40);
 
     // Admin tries to delete a room
     admin.deleteRoom("B1", "R102");
@@ -43,7 +43,7 @@ int main() {
     }
 
     // Delete building
-    buildingPtr.reset();
+    admin.deleteBuilding("B1"); // This method needs to be implemented in Admin
 
     // Attempt to access room and booking after building deletion
     std::cout << "Room number after building deletion: " << (roomRawPtr ? roomRawPtr->getRoomNumber() : "Room not accessible") << std::endl;

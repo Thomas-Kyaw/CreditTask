@@ -105,3 +105,14 @@ std::shared_ptr<Booking> Admin::findBooking(const std::string& bookingID) {
 
     return nullptr; // Return nullptr if booking is not found
 }
+
+void Admin::deleteBuilding(const std::string& buildingCode) {
+    auto it = buildings.find(buildingCode);
+    if (it != buildings.end()) {
+        buildings.erase(it);
+        std::cout << "Building " << buildingCode << " has been deleted." << std::endl;
+    } else {
+        std::cout << "Building " << buildingCode << " not found." << std::endl;
+    }
+}
+
