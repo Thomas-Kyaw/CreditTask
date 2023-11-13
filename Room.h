@@ -18,6 +18,7 @@ private:
     int capacity;
     std::string roomNumber;
     std::vector<Booking*> bookings; // Stores pointers to bookings
+    std::weak_ptr<Room> self;
 
 public:
     Room(Building* bld, const std::string& number, int cap);
@@ -32,6 +33,14 @@ public:
     Building* getBuilding() const; // Getter for the building pointer
 
     virtual std::string GetDetails() const;
+
+    void initializeSelf(std::shared_ptr<Room> selfPtr) {
+        self = selfPtr;
+    }
+
+    std::shared_ptr<Room> getSharedPtr() {
+        return self.lock();
+    }
     // Other methods and members as needed
 };
 

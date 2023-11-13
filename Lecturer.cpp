@@ -21,7 +21,13 @@ std::string Lecturer::generateBookingID() {
 
 bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float endTime) {
     if (room->isAvailable(startTime, endTime)) {
-        auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, room);
+        auto roomSharedPtr = room->getSharedPtr();
+        if (!roomSharedPtr) {
+            std::cerr << "Failed to get shared pointer for room." << std::endl;
+            return false;
+        }
+
+        auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, roomSharedPtr);
         room->addBooking(newBooking.get()); // Pass the raw pointer
         bookings.push_back(newBooking); // Store the shared_ptr
         return true;
