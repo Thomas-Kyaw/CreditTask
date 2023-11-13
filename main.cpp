@@ -3,6 +3,7 @@
 #include "Booking.h"
 #include "Lecturer.h"
 #include "Subject.h"
+#include "Admin.h"
 #include <iostream>
 #include <memory>
 
@@ -24,13 +25,28 @@ int main() {
 
     std::cout << "Booking created for room: " << sharedRoomPtr->getRoomNumber() << std::endl;
 
+    // Admin for managing rooms and buildings
+    Admin admin("Admin1");
+
+    // Admin adds another room
+    auto anotherRoomPtr = std::make_unique<Room>(buildingPtr.get(), "R102", 40);
+    buildingPtr->addRoom(std::move(anotherRoomPtr));
+
+    // Admin tries to delete a room
+    admin.deleteRoom("B1", "R102");
+
+    // Check if the room is deleted
+    if (buildingPtr->findRoom("R102")) {
+        std::cout << "Room R102 still exists." << std::endl;
+    } else {
+        std::cout << "Room R102 has been deleted." << std::endl;
+    }
+
     // Delete building
     buildingPtr.reset();
 
     // Attempt to access room and booking after building deletion
-    // WARNING: This is dangerous and typically results in undefined behavior
-    // Uncomment the following lines to test, but expect crashes or erroneous behavior
-     std::cout << "Room number after building deletion: " << roomRawPtr->getRoomNumber() << std::endl;
+    std::cout << "Room number after building deletion: " << (roomRawPtr ? roomRawPtr->getRoomNumber() : "Room not accessible") << std::endl;
     std::cout << "Booking details after building deletion: " << booking.getDetails() << std::endl;
 
     return 0;
