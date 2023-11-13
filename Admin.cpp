@@ -42,6 +42,16 @@ void Admin::deleteRoom(const std::string& buildingCode, const std::string& roomN
             room->notifyBookingsRoomDeletion();
         }
         building->second->deleteRoom(roomNumber);
+
+        // Debugging: Check if the room still exists after deletion
+        room = building->second->findRoom(roomNumber);
+        if (room) {
+            std::cout << "Room " << roomNumber << " still exists in building " << buildingCode << "." << std::endl;
+        } else {
+            std::cout << "Room " << roomNumber << " successfully deleted from building " << buildingCode << "." << std::endl;
+        }
+    } else {
+        std::cout << "Building " << buildingCode << " not found." << std::endl;
     }
 }
 

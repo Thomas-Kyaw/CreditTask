@@ -1,6 +1,7 @@
 #include "Building.h"
 #include <algorithm>
 #include <stdexcept>
+#include <iostream>
 
 Building::Building(const std::string& code) : buildingCode(code) {}
 
@@ -41,8 +42,9 @@ void Building::deleteRoom(const std::string& roomNumber) {
     });
     if (it != rooms.end()) {
         rooms.erase(it); // unique_ptr will automatically delete the Room object
+        std::cout << "Room " << roomNumber << " deleted from building " << buildingCode << "." << std::endl;
     } else {
-        throw std::runtime_error("Room not found.");
+        std::cout << "Room " << roomNumber << " not found in building " << buildingCode << "." << std::endl;
     }
 }
 
