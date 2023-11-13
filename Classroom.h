@@ -1,7 +1,3 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/07.
-//
-
 #ifndef CLASSROOM_H
 #define CLASSROOM_H
 
@@ -14,7 +10,7 @@ private:
     ClassroomType roomType;
 
 public:
-    Classroom(Building* bld, const std::string& number, int cap, ClassroomType type);
+    Classroom(std::shared_ptr<Building> bld, const std::string& number, int cap, ClassroomType type);
     virtual std::string GetDetails() const override;
 };
 

@@ -5,7 +5,7 @@
 // MeetingRoom.cpp
 #include "MeetingRoom.h"
 
-MeetingRoom::MeetingRoom(Building* bld, const std::string& number, int cap, bool conferenceCall, bool whiteboard)
+MeetingRoom::MeetingRoom(std::shared_ptr<Building> bld, const std::string& number, int cap, bool conferenceCall, bool whiteboard)
         : Room(bld, number, cap), hasConferenceCallEquipment(conferenceCall), hasWhiteboard(whiteboard){
     // Additional initialization for MeetingRoom if needed
 }

@@ -2,10 +2,13 @@
 #include <algorithm>
 #include <stdexcept>
 #include <iostream>
+#include <memory>
 
 Building::Building(const std::string& code) : buildingCode(code) {}
 
-void Building::addRoom(std::unique_ptr<Room> room) {
+void Building::addRoom(const std::string& roomNumber, int capacity) {
+    auto sharedBuildingPtr = shared_from_this(); // Get a shared_ptr to this Building
+    auto room = std::make_unique<Room>(sharedBuildingPtr, roomNumber, capacity);
     // Check if the room already exists and add it to the list
     auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& existingRoom) {
         return existingRoom->getRoomNumber() == room->getRoomNumber();

@@ -5,9 +5,9 @@
 // ComputerLab.cpp
 #include "ComputerLab.h"
 
-ComputerLab::ComputerLab(Building* bld, const std::string& num, int cap, const std::string& os, const std::list<std::string>& software, bool printingFacility)
+ComputerLab::ComputerLab(std::shared_ptr<Building> bld, const std::string& num, int cap, const std::string& os, const std::list<std::string>& software, bool printingFacility)
         : Room(bld, num, cap), operatingSystem(os), softwareInstalled(software), hasPrintingFacility(printingFacility) {
-    // Additional initialization for ComputerLab if needed
+    // ...
 }
 
 std::string ComputerLab::GetDetails() const {

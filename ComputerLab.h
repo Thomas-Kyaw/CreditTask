@@ -15,7 +15,7 @@ class ComputerLab : public Room {
     bool hasPrintingFacility;
 
 public:
-    ComputerLab(Building* bld, const std::string& num, int cap, const std::string& os, const std::list<std::string>& software, bool printingFacility);
+    ComputerLab(std::shared_ptr<Building> bld, const std::string& num, int cap, const std::string& os, const std::list<std::string>& software, bool printingFacility);
     virtual std::string GetDetails() const override;
 };
 

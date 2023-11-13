@@ -19,9 +19,14 @@ std::shared_ptr<Building> Admin::getBuilding(const std::string& buildingCode) {
 }
 
 void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity) {
-    auto building = getBuilding(buildingCode);
-    auto newRoom = std::make_unique<Room>(building.get(), roomNumber, capacity);
-    building->addRoom(std::move(newRoom));
+    auto buildingIt = buildings.find(buildingCode);
+    if (buildingIt != buildings.end()) {
+        auto& building = buildingIt->second;
+        building->addRoom(roomNumber, capacity); // Assuming addRoom in Building takes roomNumber and capacity
+    } else {
+        // Handle the case where the building does not exist
+        std::cerr << "Building with code " << buildingCode << " not found." << std::endl;
+    }
 }
 
 void Admin::editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity) {

@@ -7,6 +7,7 @@
 
 #include "Booking.h"
 #include <vector>
+#include <memory>
 #include <string>
 
 // Forward declaration to avoid circular dependency
@@ -14,14 +15,15 @@ class Building;
 
 class Room {
 private:
-    Building* building; // Pointer to the Building this Room belongs to
+    //Building* building; // Pointer to the Building this Room belongs to
+    std::weak_ptr<Building> building;
     int capacity;
     std::string roomNumber;
     std::vector<Booking*> bookings; // Stores pointers to bookings
     std::weak_ptr<Room> self;
 
 public:
-    Room(Building* bld, const std::string& number, int cap);
+    Room(std::shared_ptr<Building> building, const std::string& roomNumber, int capacity);
     ~Room(); // Destructor to handle cleanup if necessary
     bool isAvailable(float desiredStartTime, float desiredEndTime) const;
     void addBooking(Booking* booking);

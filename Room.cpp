@@ -9,9 +9,9 @@
 #include <iostream>
 #include <memory>
 
-Room::Room(Building* bld, const std::string& number, int cap)
-        : building(bld), roomNumber(number), capacity(cap) {
-    // The room is added to the building in Admin::addRoom
+Room::Room(std::shared_ptr<Building> buildingPtr, const std::string& roomNumber, int capacity)
+        : building(buildingPtr), roomNumber(roomNumber), capacity(capacity) {
+    // ... constructor implementation
 }
 
 Room::~Room() {
@@ -44,10 +44,16 @@ void Room::notifyBookingsRoomDeletion() {
         booking->updateOnRoomDeletion();
     }
 }
-// Make sure the getBuilding() definition matches the declaration in Room.h
+
 Building* Room::getBuilding() const {
-    return building;
+    auto sharedBuilding = building.lock(); // Lock the weak_ptr to get a shared_ptr
+    if (sharedBuilding) {
+        return sharedBuilding.get(); // Return the raw pointer
+    } else {
+        return nullptr; // Return nullptr if the Building no longer exists
+    }
 }
+
 void Room::setCapacity(int newCapacity) {
     capacity = newCapacity;
 }
