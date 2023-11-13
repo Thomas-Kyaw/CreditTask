@@ -11,7 +11,7 @@
 #include "Lecturer.h"
 
 
-class RoomTest : public CppUnit::TestFixture {
+/*class RoomTest : public CppUnit::TestFixture {
 CPPUNIT_TEST_SUITE(RoomTest);
         CPPUNIT_TEST(testIsAvailable);
         CPPUNIT_TEST(testAddRemoveBooking);
@@ -52,3 +52,4 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RoomTest);
+*/

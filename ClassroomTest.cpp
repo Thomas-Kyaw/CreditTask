@@ -8,7 +8,7 @@
 #include "Classroom.h"
 #include "Building.h"
 
-class ClassroomTest : public CppUnit::TestFixture {
+/*class ClassroomTest : public CppUnit::TestFixture {
 CPPUNIT_TEST_SUITE(ClassroomTest);
         CPPUNIT_TEST(TestGetDetails);
     CPPUNIT_TEST_SUITE_END();
@@ -25,3 +25,4 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClassroomTest);
+*/

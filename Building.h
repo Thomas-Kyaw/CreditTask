@@ -13,7 +13,7 @@ private:
 
 public:
     Building(const std::string& code);
-    ~Building(); // Destructor is not needed as unique_ptr handles deletion
+    //~Building(); // Destructor is not needed as unique_ptr handles deletion
     void addRoom(std::unique_ptr<Room> room); // Changed to take unique_ptr
     void editRoom(const std::string& roomNumber, int newCapacity);
     Room* findRoom(const std::string& roomNumber); // Returns raw pointer

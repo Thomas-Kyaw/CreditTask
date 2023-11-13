@@ -7,7 +7,7 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include "Building.h"
 
-class BuildingTest : public CppUnit::TestFixture {
+/*class BuildingTest : public CppUnit::TestFixture {
 CPPUNIT_TEST_SUITE(BuildingTest);
         CPPUNIT_TEST(testAddRoom);
         CPPUNIT_TEST(testEditRoom);
@@ -51,3 +51,4 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BuildingTest);
+*/

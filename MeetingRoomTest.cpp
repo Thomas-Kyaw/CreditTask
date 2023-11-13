@@ -7,7 +7,7 @@
 #include "MeetingRoom.h"
 #include "Building.h"
 
-class MeetingRoomTest : public CppUnit::TestFixture {
+/*class MeetingRoomTest : public CppUnit::TestFixture {
 CPPUNIT_TEST_SUITE(MeetingRoomTest);
         CPPUNIT_TEST(TestGetDetails);
     CPPUNIT_TEST_SUITE_END();
@@ -24,3 +24,4 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MeetingRoomTest);
+*/

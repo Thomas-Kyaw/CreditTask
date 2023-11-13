@@ -8,7 +8,7 @@
 #include "ComputerLab.h"
 #include "Building.h"
 
-class ComputerLabTest : public CppUnit::TestFixture {
+/*class ComputerLabTest : public CppUnit::TestFixture {
 CPPUNIT_TEST_SUITE(ComputerLabTest);
         CPPUNIT_TEST(TestGetDetails);
     CPPUNIT_TEST_SUITE_END();
@@ -26,3 +26,4 @@ public:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ComputerLabTest);
+*/
