@@ -41,7 +41,7 @@ void Room::removeBooking(Booking* booking) {
 
 void Room::notifyBookingsRoomDeletion() {
     for (auto& booking : bookings) {
-        booking->updateOnRoomDeletion();
+        booking->markInvalid(); // Add a method in Booking to mark it as invalid
     }
 }
 

@@ -21,6 +21,7 @@ private:
     Lecturer* lecturer; // Pointer to the Lecturer who made the booking
     Subject* subject;   // Pointer to the Subject for which the room was booked
     std::weak_ptr<Room> room;        // Pointer to the Room that is booked
+    bool isValid;
 
 public:
     Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj, std::shared_ptr<Room> rm);
@@ -40,6 +41,11 @@ public:
 
     // Other methods and members as needed
     std::string getDetails() const;
+
+    void markInvalid() {
+        isValid = false;
+    }
+
 };
 
 #endif // BOOKING_H
