@@ -1,64 +1,53 @@
-#include "Building.h"
-#include "Room.h"
-#include "Booking.h"
-#include "Lecturer.h"
-#include "Subject.h"
-#include "Admin.h"
-#include <iostream>
-#include <memory>
+    #include "Building.h"
+    #include "Room.h"
+    #include "Booking.h"
+    #include "Lecturer.h"
+    #include "Subject.h"
+    #include "Admin.h"
+    #include <iostream>
+    #include <memory>
 
-int main() {
-    Admin admin("Admin1");
+    int main() {
+        // Admin for managing rooms and buildings
+        Admin admin("Admin1");
 
-    // Admin creates a building
-    auto buildingPtr = admin.getBuilding("B1");
+        // Admin creates a building
+        auto buildingPtr = admin.getBuilding("B1");
 
-    // Admin adds rooms to the building
-    admin.addRoom("B1", "R101", 30);
-    admin.addRoom("B1", "R102", 40);
+        // Admin adds a room to the building
+        admin.addRoom("B1", "R101", 30);
 
-    // Retrieve the room pointer for further use
-    auto roomPtr = buildingPtr->findRoom("R101");
+        // Retrieve the room pointer for further use
+        Room* roomRawPtr = buildingPtr->findRoom("R101");
 
-    // Create lecturer and subject
-    Lecturer lecturer("Dr. Smith", "Lec1", roomPtr);
-    Subject subject("CS101", "Computer Science");
+        Lecturer lecturer("Dr. Smith", "Lec1", roomRawPtr);
+        Subject subject("CS101", "Computer Science");
 
-    // Lecturer books a room
-    if (lecturer.bookRoom(roomPtr, &subject, 9.0f, 10.0f)) {
-        std::cout << "Booking created for room: " << roomPtr->getRoomNumber() << std::endl;
-    } else {
-        std::cout << "Failed to create booking." << std::endl;
+        // Create Booking with shared_ptr to Room
+        auto sharedRoomPtr = std::make_shared<Room>(*roomRawPtr);
+        Booking booking("B1", "R101", 9.0f, 10.0f, &lecturer, &subject, sharedRoomPtr);
+
+        std::cout << "Booking created for room: " << sharedRoomPtr->getRoomNumber() << std::endl;
+
+        // Admin adds another room
+        admin.addRoom("B1", "R102", 40);
+
+        // Admin tries to delete a room
+        admin.deleteRoom("B1", "R102");
+
+        // Check if the room is deleted
+        if (buildingPtr->findRoom("R102")) {
+            std::cout << "Room R102 still exists." << std::endl;
+        } else {
+            std::cout << "Room R102 has been deleted." << std::endl;
+        }
+
+        // Delete building
+        admin.deleteBuilding("B1"); // This method needs to be implemented in Admin
+
+        // Attempt to access room and booking after building deletion
+        std::cout << "Room number after building deletion: " << (roomRawPtr ? roomRawPtr->getRoomNumber() : "Room not accessible") << std::endl;
+        std::cout << "Booking details after building deletion: " << booking.getDetails() << std::endl;
+
+        return 0;
     }
-
-    // Retrieve the booking ID (assuming the first booking is the one we're interested in)
-    auto bookings = lecturer.getBookings();
-    std::string bookingID = bookings.empty() ? "" : bookings.front()->getBookingID();
-
-    // Cancel the booking
-    if (lecturer.cancelBooking(bookingID)) {
-        std::cout << "Booking cancelled successfully." << std::endl;
-    } else {
-        std::cout << "Failed to cancel booking." << std::endl;
-    }
-
-    // Attempt to display booking details after cancellation
-    if (!bookings.empty()) {
-        std::cout << "Booking details after cancellation: " << bookings.front()->getDetails() << std::endl;
-    } else {
-        std::cout << "No bookings to display." << std::endl;
-    }
-
-    // Delete building
-    admin.deleteBuilding("B1");
-
-    // Attempt to access room and booking after building deletion
-    std::cout << "Room number after building deletion: " << (roomPtr ? roomPtr->getRoomNumber() : "Room not accessible") << std::endl;
-    if (!bookings.empty()) {
-        std::cout << "Booking details after building deletion: " << bookings.front()->getDetails() << std::endl;
-    } else {
-        std::cout << "No bookings to display." << std::endl;
-    }
-
-    return 0;
-}

@@ -114,11 +114,10 @@ std::shared_ptr<Booking> Admin::findBooking(const std::string& bookingID) {
 void Admin::deleteBuilding(const std::string& buildingCode) {
     auto it = buildings.find(buildingCode);
     if (it != buildings.end()) {
-        // Reset the shared pointer to the building
-        it->second.reset();
-        // Remove the building from the map
         buildings.erase(it);
         std::cout << "Building " << buildingCode << " has been deleted." << std::endl;
+    } else {
+        std::cout << "Building " << buildingCode << " not found." << std::endl;
     }
 }
 
