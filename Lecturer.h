@@ -26,6 +26,11 @@ public:
     bool cancelBooking(const std::string& bookingID);
     std::vector<Room*> searchRoomsByCapacity(const std::vector<Room*>& allRooms, int requiredCapacity);
     std::string getName() const;
+
+    // Method to get bookings
+    const std::vector<std::shared_ptr<Booking>>& getBookings() const {
+        return bookings;
+    }
 };
 
 #endif // LECTURER_H

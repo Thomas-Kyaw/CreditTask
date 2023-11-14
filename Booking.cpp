@@ -26,11 +26,19 @@ void Booking::updateOnRoomDeletion() {
 }
 
 std::string Booking::getDetails() const {
-    std::string details = "Booking Details:\n";
-    details += "Room: " + roomNumber + "\n";
-    details += "Time: " + std::to_string(startTime) + " - " + std::to_string(endTime) + "\n";
-    details += "Lecturer: " + lecturer->getName() + "\n";
-    details += "Subject: " + subject->getDetails() + "\n";
-    return details;
+    auto roomSharedPtr = room.lock(); // Attempt to lock the weak pointer
+    if (roomSharedPtr) {
+        // Room is valid, proceed with accessing its details
+        std::string details = "Booking Details:\n";
+        details += "Room: " + roomNumber + "\n";
+        details += "Time: " + std::to_string(startTime) + " - " + std::to_string(endTime) + "\n";
+        details += "Lecturer: " + lecturer->getName() + "\n";
+        details += "Subject: " + subject->getDetails() + "\n";
+        return details;
+    } else {
+        // Room is no longer valid
+        return "Booking details not available (room deleted or inaccessible).";
+    }
 }
+
 
