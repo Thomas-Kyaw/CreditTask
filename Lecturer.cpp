@@ -43,7 +43,13 @@ bool Lecturer::cancelBooking(const std::string& bookingID) {
     });
 
     if (it != bookings.end()) {
+        // Mark the booking as invalid before removing it
+        (*it)->markInvalid();
+
+        // Remove the booking from the room's booking list
         (*it)->getRoom()->removeBooking(it->get()); // Pass raw pointer to Room
+
+        // Erase the booking from the lecturer's list of bookings
         bookings.erase(it);
         return true;
     } else {
