@@ -7,7 +7,7 @@
     #include <iostream>
     #include <memory>
 
-    /*int main() {
+    int main() {
         // Admin for managing rooms and buildings
         Admin admin("Admin1");
 
@@ -43,7 +43,17 @@
         }
 
         // Delete building
-        admin.deleteBuilding("B1"); // This method needs to be implemented in Admin
+        admin.deleteBuilding("B1");
+
+        // Check if the building has been deleted
+        if(buildingPtr.use_count() == 1) {
+            std::cout << "Building has been deleted and doesn't exist in the admin's records." << std::endl;
+        } else {
+            std::cout << "Building still exists in the admin's records." << std::endl;
+        }
+
+        // Check the number of rooms in the building after deletion
+        std::cout << "Number of rooms in the building after deletion: " << buildingPtr->getRoomCount() << std::endl;
 
         // Attempt to access room and booking after building deletion
         std::cout << "Room number after building deletion: " << (roomRawPtr ? roomRawPtr->getRoomNumber() : "Room not accessible") << std::endl;
@@ -51,4 +61,3 @@
 
         return 0;
     }
-*/

@@ -59,5 +59,8 @@ std::shared_ptr<Room> Building::getRoomSharedPtr(const std::string& roomNumber) 
     return nullptr;
 }
 
+size_t Building::getRoomCount() const {
+    return rooms.size(); // Assuming 'rooms' is the container holding the rooms
+}
 
 // ... Other method implementations as needed

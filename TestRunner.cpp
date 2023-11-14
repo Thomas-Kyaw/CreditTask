@@ -1,6 +1,6 @@
 // TestRunner.cpp
 // Created by Aung Khant Kyaw on 2023/11/12.
-
+/*
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
@@ -18,4 +18,4 @@ int main() {
     bool wasSuccessful = runner.run("", false);
     return wasSuccessful ? 0 : 1;
 }
-
+*/
