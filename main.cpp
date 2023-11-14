@@ -43,11 +43,21 @@
         }
 
         // Delete building
-        admin.deleteBuilding("B1"); // This method needs to be implemented in Admin
+        admin.deleteBuilding("B1");
+        buildingPtr = nullptr; // Invalidate the building pointer
 
         // Attempt to access room and booking after building deletion
-        std::cout << "Room number after building deletion: " << (roomRawPtr ? roomRawPtr->getRoomNumber() : "Room not accessible") << std::endl;
-        std::cout << "Booking details after building deletion: " << booking.getDetails() << std::endl;
+        if (roomRawPtr) {
+            std::cout << "Room number after building deletion: " << roomRawPtr->getRoomNumber() << std::endl;
+        } else {
+            std::cout << "Room not accessible after building deletion." << std::endl;
+        }
+
+        if (sharedRoomPtr) {
+            std::cout << "Booking details after building deletion: " << booking.getDetails() << std::endl;
+        } else {
+            std::cout << "Booking details not accessible after building deletion." << std::endl;
+        }
 
         return 0;
     }
