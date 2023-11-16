@@ -5,17 +5,19 @@
 #ifndef SUBJECT_H
 #define SUBJECT_H
 
-#include <string>
+#include <string> // Include standard string library
 
+// Subject class definition
 class Subject {
 private:
-    std::string subjectCode;
-    std::string name;
+    std::string subjectCode; // Unique code identifying the subject
+    std::string name; // Name of the subject
 
 public:
+    // Constructor for Subject
     Subject(const std::string &code, const std::string &name);
-    std::string getDetails() const;
+    // Method to get details of the subject
+    std::string getDetails() const; // Returns the details of the subject
 };
 
 #endif // SUBJECT_H
-
