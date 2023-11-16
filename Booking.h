@@ -55,7 +55,7 @@ public:
     // Other methods and members as needed
     // Get detailed information about the booking
     std::string getDetails() const;
-
+    std::string bookingStatusToString(BookingStatus status) const;
     // Mark the booking as invalid
     void markInvalid() {
         isValid = false;

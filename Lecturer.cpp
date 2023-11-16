@@ -1,6 +1,7 @@
 #include "Lecturer.h"
 #include "Booking.h"
 #include "Building.h"
+#include "Globals.h"
 #include <iostream>
 #include <algorithm>
 #include <sstream>
@@ -30,6 +31,8 @@ bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float end
         auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, roomSharedPtr);
         room->addBooking(newBooking.get()); // Pass the raw pointer
         bookings.push_back(newBooking); // Store the shared_ptr
+
+        globalAdmin.addPendingBooking(newBooking);
         return true;
     } else {
         std::cout << "Room is not available for the requested time slot." << std::endl;

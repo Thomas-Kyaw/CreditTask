@@ -32,10 +32,25 @@ std::string Booking::getDetails() const {
     }
 
     std::string details = "Booking Details:\n";
+    details += "Booking ID: " + bookingID + "\n";
     details += "Room: " + roomNumber + "\n";
     details += "Time: " + std::to_string(startTime) + " - " + std::to_string(endTime) + "\n";
     details += "Lecturer: " + (lecturer ? lecturer->getName() : "No Lecturer") + "\n";
     details += "Subject: " + (subject ? subject->getDetails() : "No Subject") + "\n";
+    details += "Status: " + bookingStatusToString(status) + "\n";
     return details;
+}
+
+std::string Booking::bookingStatusToString(BookingStatus status) const {
+    switch (status) {
+        case BookingStatus::PENDING:
+            return "Pending";
+        case BookingStatus::APPROVED:
+            return "Approved";
+        case BookingStatus::REJECTED:
+            return "Rejected";
+        default:
+            return "Unknown";
+    }
 }
 

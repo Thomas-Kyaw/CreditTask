@@ -1,4 +1,5 @@
 #include "Building.h"
+#include "Room.h"
 #include <algorithm>
 #include <stdexcept>
 #include <iostream>
@@ -8,18 +9,18 @@ Building::Building(const std::string& code) : buildingCode(code) {}
 
 void Building::addRoom(const std::string& roomNumber, int capacity) {
     auto sharedBuildingPtr = shared_from_this(); // Get a shared_ptr to this Building
-    auto room = std::make_unique<Room>(sharedBuildingPtr, roomNumber, capacity);
+    auto room = std::make_shared<Room>(sharedBuildingPtr, roomNumber, capacity);
     // Check if the room already exists and add it to the list
-    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& existingRoom) {
+    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::shared_ptr<Room>& existingRoom) {
         return existingRoom->getRoomNumber() == room->getRoomNumber();
     });
     if (it == rooms.end()) {
-        rooms.push_back(std::move(room)); // Use std::move to transfer ownership
+        rooms.push_back(room); // No need to use std::move
     }
 }
 
 void Building::editRoom(const std::string& roomNumber, int newCapacity) {
-    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& room) {
+    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::shared_ptr<Room>& room) {
         return room->getRoomNumber() == roomNumber;
     });
     if (it != rooms.end()) {
@@ -30,31 +31,42 @@ void Building::editRoom(const std::string& roomNumber, int newCapacity) {
 }
 
 Room* Building::findRoom(const std::string& roomNumber) {
-    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& room) {
+    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::shared_ptr<Room>& room) {
         return room->getRoomNumber() == roomNumber;
     });
     if (it != rooms.end()) {
-        return it->get(); // Return the raw pointer managed by unique_ptr
+        return it->get(); // Return the raw pointer managed by shared_ptr
     }
     return nullptr; // Room not found
 }
 
 void Building::deleteRoom(const std::string& roomNumber) {
-    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::unique_ptr<Room>& room) {
+    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::shared_ptr<Room>& room) {
         return room->getRoomNumber() == roomNumber;
     });
     if (it != rooms.end()) {
-        rooms.erase(it); // unique_ptr will automatically delete the Room object
+        rooms.erase(it);
         std::cout << "Room " << roomNumber << " deleted from building " << buildingCode << "." << std::endl;
     } else {
         std::cout << "Room " << roomNumber << " not found in building " << buildingCode << "." << std::endl;
     }
 }
 
+/*std::shared_ptr<Room> Building::getRoomSharedPtr(const std::string& roomNumber) {
+    for (auto& room : rooms) {
+        if (room->getRoomNumber() == roomNumber) {
+            return room; // Assuming 'rooms' is now a vector of shared_ptr<Room>
+        }
+    }
+    return nullptr; // If room not found
+}*/
+
 std::shared_ptr<Room> Building::getRoomSharedPtr(const std::string& roomNumber) {
-    Room* room = findRoom(roomNumber);
-    if (room) {
-        return std::shared_ptr<Room>(room, [](Room*){/* do not delete the room */});
+    auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::shared_ptr<Room>& room) {
+        return room->getRoomNumber() == roomNumber;
+    });
+    if (it != rooms.end()) {
+        return *it; // Directly return the shared_ptr
     }
     return nullptr;
 }

@@ -10,7 +10,8 @@
 class Building : public std::enable_shared_from_this<Building>{
 private:
     std::string buildingCode; // Stores the unique code of the building
-    std::vector<std::unique_ptr<Room>> rooms; // Stores rooms as unique pointers, ensuring unique ownership
+    //std::vector<std::unique_ptr<Room>> rooms; // Stores rooms as unique pointers, ensuring unique ownership
+    std::vector<std::shared_ptr<Room>> rooms;
 
 public:
     // Constructor

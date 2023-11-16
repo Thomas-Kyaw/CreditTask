@@ -61,28 +61,27 @@ void Admin::deleteRoom(const std::string& buildingCode, const std::string& roomN
 }
 
 void Admin::approveBooking(const std::string& bookingID) {
-    auto it = std::find_if(pendingBookings.begin(), pendingBookings.end(),
-                           [&](const std::shared_ptr<Booking>& booking) { return booking->getBookingID() == bookingID; });
-
-    if (it != pendingBookings.end() && (*it)->getStatus() == BookingStatus::PENDING) {
-        auto room = findRoom((*it)->getRoomNumber());
-        if (room && room->isAvailable((*it)->getStartTime(), (*it)->getEndTime())) {
-            (*it)->setStatus(BookingStatus::APPROVED);
-            room->addBooking(it->get());
-        } else {
-            std::cout << "Cannot approve booking: Room is not available at the requested time." << std::endl;
-        }
+    std::cout << "Attempting to approve booking ID: " << bookingID << std::endl;
+    auto booking = findBooking(bookingID);
+    if (booking && booking->getStatus() == BookingStatus::PENDING) {
+        // Temporarily comment out the room availability check for debugging
+        // auto room = findRoom(booking->getRoomNumber());
+        // if (room && room->isAvailable(booking->getStartTime(), booking->getEndTime())) {
+        booking->setStatus(BookingStatus::APPROVED);
+        std::cout << "Booking " << bookingID << " approved." << std::endl;
+        // ...
     } else {
         std::cout << "Booking ID not found or not pending." << std::endl;
     }
 }
 
-void Admin::rejectBooking(const std::string& bookingID) {
-    auto it = std::find_if(pendingBookings.begin(), pendingBookings.end(),
-                           [&](const std::shared_ptr<Booking>& booking) { return booking->getBookingID() == bookingID; });
 
-    if (it != pendingBookings.end()) {
-        (*it)->setStatus(BookingStatus::REJECTED);
+void Admin::rejectBooking(const std::string& bookingID) {
+    auto booking = findBooking(bookingID);
+    if (booking) {
+        booking->setStatus(BookingStatus::REJECTED);
+        // Remove from pendingBookings
+        pendingBookings.erase(std::remove(pendingBookings.begin(), pendingBookings.end(), booking), pendingBookings.end());
         std::cout << "Booking with ID " << bookingID << " has been rejected." << std::endl;
     } else {
         std::cout << "Booking with ID " << bookingID << " not found." << std::endl;

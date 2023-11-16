@@ -14,13 +14,13 @@
 class Building;
 
 // Room class definition
-class Room {
+class Room : public std::enable_shared_from_this<Room>{
 private:
     std::weak_ptr<Building> building; // Weak pointer to the Building to avoid circular references
     int capacity; // Capacity of the room
     std::string roomNumber; // Number of the room
     std::vector<Booking*> bookings; // Vector storing pointers to the bookings made for this room
-    std::weak_ptr<Room> self; // Weak pointer to self, used for shared_ptr management
+    //std::weak_ptr<Room> self; // Weak pointer to self, used for shared_ptr management
 
 public:
     // Constructor
@@ -49,13 +49,13 @@ public:
     virtual std::string GetDetails() const;
 
     // Initialize the weak self-pointer with a shared_ptr of this object
-    void initializeSelf(std::shared_ptr<Room> selfPtr) {
+    /*void initializeSelf(std::shared_ptr<Room> selfPtr) {
         self = selfPtr;
-    }
+    }*/
 
     // Get a shared pointer to this room
     std::shared_ptr<Room> getSharedPtr() {
-        return self.lock();
+        return shared_from_this();
     }
     // Other methods and members as needed
 };

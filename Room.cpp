@@ -73,8 +73,3 @@ std::string Room::GetDetails() const {
     return details;
 }
 // Other methods
-
-
-
-
-
