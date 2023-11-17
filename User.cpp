@@ -8,3 +8,6 @@ User::User(const std::string &nameVal) : name(nameVal) {}
 
 User::~User() {}
 
+std::string User::GetDetails() const {
+    return "Username - " + name;
+}

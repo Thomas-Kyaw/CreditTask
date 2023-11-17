@@ -18,6 +18,7 @@ public:
     Subject(const std::string &code, const std::string &name);
     // Method to get details of the subject
     std::string getDetails() const; // Returns the details of the subject
+    std::string getCode() const;
 };
 
 #endif // SUBJECT_H

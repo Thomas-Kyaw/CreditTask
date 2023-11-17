@@ -11,3 +11,8 @@ std::string Subject::getDetails() const {
     return "Subject Code: " + subjectCode + ", Name: " + name;
 }
 
+std::string Subject::getCode() const{
+    return subjectCode;
+}
+
+

@@ -85,3 +85,11 @@ std::vector<Room*> Lecturer::searchRoomsByCapacity(const std::vector<Room*>& all
 std::string Lecturer::getName() const {
     return name;
 }
+std::string Lecturer::GetDetails() const {
+    std::stringstream details;
+    details << User::GetDetails() << "\nTeaching Subjects:\n";
+    for (const auto& subj : subjects) {
+        details << "- " << subj->getCode() << "\n";
+    }
+    return details.str();
+}

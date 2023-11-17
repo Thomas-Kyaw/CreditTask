@@ -17,6 +17,8 @@ public:
     User(const std::string &name);
     // Virtual destructor as this is a base class
     virtual ~User() = 0; // Pure virtual destructor making User an abstract class
+    // Virtual method to get user details
+    virtual std::string GetDetails() const;
 };
 
 #endif // USER_H

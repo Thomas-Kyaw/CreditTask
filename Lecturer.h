@@ -25,6 +25,9 @@ public:
     // Destructor
     ~Lecturer();
 
+    // Override GetDetails method
+    std::string GetDetails() const override;
+
     // Method to generate a unique booking ID
     std::string generateBookingID();
     // Method to book a room
