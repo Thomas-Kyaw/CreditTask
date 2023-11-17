@@ -19,14 +19,14 @@ void flushCin();
 
 int main() {
     // Initial Setup
-    std::cout << "Room Booking System\n";
+    /*std::cout << "Room Booking System\n";
     std::cout << "1. Admin\n";
     std::cout << "2. Lecturer\n";
     std::cout << "Select your role: ";
 
     int role;
     std::cin >> role;
-    flushCin();  // Clear any lingering input
+    flushCin();  // Clear any lingering input*/
 
     // Predetermined data setup
     std::vector<std::shared_ptr<Building>> buildings;
@@ -39,19 +39,34 @@ int main() {
 
     Lecturer lecturer("Dr. Smith", "Lec1", nullptr);
 
-    // Role selection
-    switch (role) {
-        case 1:
-            adminActions(globalAdmin, buildings);
-            break;
-        case 2:
-            lecturerActions(lecturer, buildings);
-            break;
-        default:
-            std::cout << "Invalid role selected. Exiting...\n";
-            break;
-    }
+    bool exitProgram = false;
+    while (!exitProgram) {
+        std::cout << "Room Booking System\n";
+        std::cout << "1. Admin\n";
+        std::cout << "2. Lecturer\n";
+        std::cout << "3. Exit\n";
+        std::cout << "Select your role: ";
 
+        int role;
+        std::cin >> role;
+        flushCin();  // Clear any lingering input
+
+        switch (role) {
+            case 1:
+                adminActions(globalAdmin, buildings);
+                break;
+            case 2:
+                lecturerActions(lecturer, buildings);
+                break;
+            case 3:
+                exitProgram = true;
+                std::cout << "Exiting the program...\n";
+                break;
+            default:
+                std::cout << "Invalid role selected.\n";
+                break;
+        }
+    }
     return 0;
 }
 
@@ -98,6 +113,7 @@ void adminActions(Admin& admin, std::vector<std::shared_ptr<Building>>& building
                 break;
             }
             case 3: {
+
                 // Delete Room logic
                 std::string buildingCode, roomNumber;
                 std::cout << "Enter building code: ";
@@ -108,6 +124,12 @@ void adminActions(Admin& admin, std::vector<std::shared_ptr<Building>>& building
                 break;
             }
             case 4: {
+                // Display all pending bookings
+                auto Bookings = admin.getBookings();
+                std::cout << "Pending Bookings:\n";
+                for (const auto& booking : Bookings) {
+                    std::cout << booking->getDetails() << std::endl;
+                }
                 // Approve Booking logic
                 std::string bookingID;
                 std::cout << "Enter booking ID to approve: ";
@@ -116,6 +138,12 @@ void adminActions(Admin& admin, std::vector<std::shared_ptr<Building>>& building
                 break;
             }
             case 5: {
+                // Display all pending bookings
+                auto Bookings = admin.getBookings();
+                std::cout << "Pending Bookings:\n";
+                for (const auto& booking : Bookings) {
+                    std::cout << booking->getDetails() << std::endl;
+                }
                 // Reject Booking logic
                 std::string bookingID;
                 std::cout << "Enter booking ID to reject: ";
@@ -174,6 +202,12 @@ void lecturerActions(Lecturer& lecturer, const std::vector<std::shared_ptr<Build
                 break;
             }
             case 2: {
+                // Display all current bookings
+                std::cout << "Current Bookings:\n";
+                for (const auto& booking : lecturer.getBookings()) {
+                    std::cout << booking->getDetails() << std::endl;
+                }
+
                 // Cancel Booking logic
                 std::string bookingID;
                 std::cout << "Enter booking ID to cancel: ";
@@ -181,7 +215,7 @@ void lecturerActions(Lecturer& lecturer, const std::vector<std::shared_ptr<Build
                 if (lecturer.cancelBooking(bookingID)) {
                     std::cout << "Booking cancelled successfully.\n";
                 } else {
-                    std::cout << "Failed to cancel booking.\n";
+                    std::cout << "Failed to cancel booking. Ensure the booking ID is correct.\n";
                 }
                 break;
             }

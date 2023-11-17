@@ -22,6 +22,7 @@ std::string Lecturer::generateBookingID() {
 }
 
 bool Lecturer::bookRoom(Room* room, Subject* subject, const std::string& date, float startTime, float endTime) {
+    std::cout << "Attempting to book - Date: " << date << ", Time: " << startTime << " - " << endTime << "\n";
     // Check if the room has been deleted
     auto search = deletedRooms.find(room->getUniqueRoomID());
     if (search != deletedRooms.end()) {

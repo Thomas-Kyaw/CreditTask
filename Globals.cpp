@@ -12,3 +12,5 @@
         }
 
         std::set<unsigned int> deletedRooms;
+
+        //std::vector<std::shared_ptr<Booking>> CancelledBookings;

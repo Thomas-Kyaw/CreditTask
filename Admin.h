@@ -35,6 +35,10 @@ public:
         Bookings.push_back(booking);
     }
 
+    std::vector<std::shared_ptr<Booking>> getBookings(){
+        return  Bookings;
+    }
+
     void addBuilding(std::shared_ptr<Building> building);
     // Method to delete a building
     void deleteBuilding(const std::string& buildingCode);

@@ -12,4 +12,6 @@ extern std::set<unsigned int> deletedRooms;
 
 unsigned int generateRoomID();
 
+extern std::vector<std::shared_ptr<Booking>> CancelledBookings;
+
 #endif // CREDITTASK_GLOBALS_H

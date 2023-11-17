@@ -4,7 +4,11 @@ class Room;
 #include <iostream>
 #include <algorithm>
 #include <memory>
+#include <list>
 #include "Globals.h"
+#include "ComputerLab.h"
+#include "MeetingRoom.h"
+#include "Classroom.h"
 
 Admin::Admin(const std::string &nameVal) : User(nameVal) {}
 
@@ -34,14 +38,67 @@ void Admin::addBuilding(std::shared_ptr<Building> building) {
 }
 
 void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity) {
-    std::cout << "Adding room: " << roomNumber << " to building: " << buildingCode << "\n";
-    auto buildingIt = buildings.find(buildingCode);
-    if (buildingIt != buildings.end()) {
-        auto& building = buildingIt->second;
-        building->addRoom(roomNumber, capacity);
-        std::cout << "Room added: " << roomNumber << "\n";
-    } else {
-        std::cerr << "Failed to add room. Building with code " << buildingCode << " not found.\n";
+
+    std::cout << "Select room type (1: Classroom, 2: Computer Lab, 3: Meeting Room): ";
+    int roomType;
+    std::cin >> roomType;
+
+    std::shared_ptr<Building> building = getBuilding(buildingCode);
+    if (!building) {
+        std::cout << "Building not found.\n";
+        return;
+    }
+
+    switch (roomType) {
+        case 1: { // Classroom
+            std::cout << "Enter Classroom type (1: LectureRoom, 2: TutorialRoom): ";
+            int type;
+            std::cin >> type;
+            ClassroomType classroomType = (type == 1) ? ClassroomType::LectureRoom : ClassroomType::TutorialRoom;
+            auto newRoom = std::make_shared<Classroom>(building, roomNumber, capacity, classroomType);
+            building->addRoom(roomNumber, capacity);
+            break;
+        }
+        case 2: { // Computer Lab
+            std::cin.ignore(); // Clear the buffer
+            std::cout << "Enter operating system: ";
+            std::string operatingSystem;
+            std::getline(std::cin, operatingSystem);
+
+            std::cout << "Enter software installed (comma-separated): ";
+            std::string softwareList;
+            std::getline(std::cin, softwareList);
+            std::list<std::string> softwareInstalled; // Parse softwareList into this list
+
+            std::cout << "Does it have a printing facility? (1 for Yes, 0 for No): ";
+            bool hasPrintingFacility;
+            std::cin >> hasPrintingFacility;
+
+            auto newRoom = std::make_shared<ComputerLab>(building, roomNumber, capacity, operatingSystem, softwareInstalled, hasPrintingFacility);
+            building->addRoom(roomNumber, capacity);
+            break;
+        }
+        case 3: { // Meeting Room
+            std::cin.ignore(); // Clear the buffer
+            std::cout << "Does it have conference call equipment? (1 for Yes, 0 for No): ";
+            bool hasConferenceCallEquipment;
+            std::cin >> hasConferenceCallEquipment;
+
+            std::cout << "Does it have a whiteboard? (1 for Yes, 0 for No): ";
+            bool hasWhiteboard;
+            std::cin >> hasWhiteboard;
+
+            std::cin.ignore(); // Clear the buffer
+            std::cout << "Enter seating arrangement: ";
+            std::string seatingArrangement;
+            std::getline(std::cin, seatingArrangement);
+
+            auto newRoom = std::make_shared<MeetingRoom>(building, roomNumber, capacity, hasConferenceCallEquipment, hasWhiteboard);
+            building->addRoom(roomNumber, capacity);
+            break;
+        }
+        default:
+            std::cout << "Invalid room type selected.\n";
     }
 }
 
@@ -78,12 +135,24 @@ void Admin::approveBooking(const std::string& bookingID) {
     auto booking = findBooking(bookingID);
     if (booking && booking->getStatus() == BookingStatus::PENDING) {
         auto room = findRoom(booking->getRoomNumber());
-        if (room && room->isAvailable(booking->getBookingDate(), booking->getStartTime(), booking->getEndTime())) {
+        if (!room) {
+            std::cout << "Room not found." << std::endl;
+            return;
+        }
+
+        // Temporarily remove the pending booking from the room for availability check
+        room->removeBooking(booking);
+
+        // Check availability
+        if (room->isAvailable(booking->getBookingDate(), booking->getStartTime(), booking->getEndTime())) {
             booking->setStatus(BookingStatus::APPROVED);
             std::cout << "Booking " << bookingID << " approved." << std::endl;
         } else {
             std::cout << "Room is not available at the requested date and time." << std::endl;
         }
+
+        // Add the booking back to the room
+        room->addBooking(booking);
     } else {
         std::cout << "Booking ID not found or not pending." << std::endl;
     }
@@ -93,7 +162,6 @@ void Admin::rejectBooking(const std::string& bookingID) {
     auto booking = findBooking(bookingID);
     if (booking) {
         booking->setStatus(BookingStatus::REJECTED);
-        // Remove from pendingBookings
         Bookings.erase(std::remove(Bookings.begin(), Bookings.end(), booking), Bookings.end());
         std::cout << "Booking with ID " << bookingID << " has been rejected." << std::endl;
     } else {
