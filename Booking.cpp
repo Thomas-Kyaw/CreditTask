@@ -1,9 +1,3 @@
-//
-// Created by Aung Khant Kyaw on 2023/11/05.
-//
-
-// Booking.cpp
-
 #include "Booking.h"
 #include "Lecturer.h"
 #include "Room.h"
@@ -13,16 +7,12 @@
 
 Booking::Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj, std::shared_ptr<Room> rm)
         : bookingID(id), roomNumber(roomNum), status(BookingStatus::PENDING), startTime(start), endTime(end), lecturer(lec), subject(subj), room(rm), isValid(true) {
-    // Add this booking to the room's booking list
-    auto roomPtr = room.lock();
-    if (roomPtr) {
-        roomPtr->addBooking(this);
-    }
+
 }
 
 void Booking::updateOnRoomDeletion() {
     room.reset();
-    // Additional shit goes here
+    // Additional stuff goes here
     markInvalid();
 }
 
@@ -53,4 +43,3 @@ std::string Booking::bookingStatusToString(BookingStatus status) const {
             return "Unknown";
     }
 }
-

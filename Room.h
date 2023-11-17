@@ -16,10 +16,12 @@ class Building;
 // Room class definition
 class Room : public std::enable_shared_from_this<Room>{
 private:
+    unsigned int uniqueRoomID;
     std::weak_ptr<Building> building; // Weak pointer to the Building to avoid circular references
     int capacity; // Capacity of the room
     std::string roomNumber; // Number of the room
-    std::vector<Booking*> bookings; // Vector storing pointers to the bookings made for this room
+    //std::vector<Booking*> bookings; // Vector storing pointers to the bookings made for this room
+    std::vector<std::shared_ptr<Booking>> bookings;
     //std::weak_ptr<Room> self; // Weak pointer to self, used for shared_ptr management
 
 public:
@@ -27,13 +29,16 @@ public:
     Room(std::shared_ptr<Building> building, const std::string& roomNumber, int capacity);
     // Destructor to handle cleanup
     ~Room();
+    unsigned int getUniqueRoomID() const;
 
     // Check if room is available during the desired time
     bool isAvailable(float desiredStartTime, float desiredEndTime) const;
     // Add a booking to this room
-    void addBooking(Booking* booking);
+    //void addBooking(Booking* booking);
+    void addBooking(std::shared_ptr<Booking> booking);
     // Remove a booking from this room
-    void removeBooking(Booking* booking);
+    //void removeBooking(Booking* booking);
+    void removeBooking(std::shared_ptr<Booking> booking);
     // Notify all bookings about the room's deletion
     void notifyBookingsRoomDeletion();
     // Set a new capacity for the room

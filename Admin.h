@@ -35,6 +35,7 @@ public:
         pendingBookings.push_back(booking);
     }
 
+    void addBuilding(std::shared_ptr<Building> building);
     // Method to delete a building
     void deleteBuilding(const std::string& buildingCode);
 

@@ -2,7 +2,7 @@
 #define LECTURER_H
 
 #include "User.h" // Include the User base class
-#include "Room.h" // Include the Room class
+class Room; // Include the Room class
 #include "Subject.h" // Include the Subject class
 #include "Booking.h" // Include the Booking class
 #include "Building.h" // Include the Building class
@@ -17,6 +17,7 @@ private:
     Room* office; // Pointer to the lecturer's office room
     std::vector<Subject*> subjects; // Vector of pointers to subjects taught by the lecturer
     std::vector<std::shared_ptr<Booking>> bookings; // Vector of shared pointers to bookings made by the lecturer
+
 
 public:
     // Constructor

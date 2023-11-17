@@ -11,7 +11,7 @@ class Lecturer; // Forward declaration of the Lecturer class
 class Room; // Forward declaration of the Room class
 enum class BookingStatus { PENDING, APPROVED, REJECTED }; // Enumeration for booking statuses
 
-class Booking {
+class Booking : public std::enable_shared_from_this<Booking>{
 private:
     std::string bookingID; // Unique identifier for the booking
     std::string roomNumber; // Number of the room booked
@@ -46,7 +46,13 @@ public:
     // Get the subject associated with the booking
     Subject* getSubject() const { return subject; }
     // Get the room associated with the booking
-    Room* getRoom() const { return room.lock().get(); }
+    Room* getRoom() const {
+        auto roomPtr = room.lock();
+        if (roomPtr) {
+            return roomPtr.get();
+        }
+        return nullptr; // Room has been deleted
+    }
 
     // Mutators
     // Set a new status for the booking

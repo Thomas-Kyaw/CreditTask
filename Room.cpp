@@ -8,10 +8,16 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+#include "Globals.h"
 
 Room::Room(std::shared_ptr<Building> buildingPtr, const std::string& roomNumber, int capacity)
         : building(buildingPtr), roomNumber(roomNumber), capacity(capacity) {
     // ... constructor implementation
+    uniqueRoomID = generateRoomID();
+}
+
+unsigned int Room::getUniqueRoomID() const {
+    return uniqueRoomID;
 }
 
 Room::~Room() {
@@ -30,13 +36,14 @@ bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {
     return true;
 }
 
-void Room::addBooking(Booking* booking) {
-    bookings.push_back(booking); // Assuming bookings is std::vector<Booking*>
+void Room::addBooking(std::shared_ptr<Booking> booking) {
+    auto self = shared_from_this();
+    bookings.push_back(booking);
 }
 
-void Room::removeBooking(Booking* booking) {
+void Room::removeBooking(std::shared_ptr<Booking> booking) {
     bookings.erase(std::remove_if(bookings.begin(), bookings.end(),
-                                  [booking](const Booking* b) { return b == booking; }), bookings.end());
+                                  [booking](const std::shared_ptr<Booking>& b) { return b == booking; }), bookings.end());
 }
 
 void Room::notifyBookingsRoomDeletion() {

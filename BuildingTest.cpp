@@ -21,12 +21,19 @@ public:
 
     void testEditRoom() {
         auto building = std::make_shared<Building>("B1");
-        auto room1 = std::make_shared<Room>(building, "R101", 30);
 
+        // Add room to building
         building->addRoom("R101", 30);
+
+        // Edit room capacity
         building->editRoom("R101", 50);
-        CPPUNIT_ASSERT_EQUAL(50, room1->getCapacity());
+
+        // Retrieve room from building and check its capacity
+        auto room = building->findRoom("R101");
+        CPPUNIT_ASSERT(room != nullptr);
+        CPPUNIT_ASSERT_EQUAL(50, room->getCapacity());
     }
+
 
     void testFindRoom() {
         auto building = std::make_shared<Building>("B1");

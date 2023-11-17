@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include "Globals.h"
 
 Lecturer::Lecturer(const std::string &nameVal, const std::string &id, Room* officeRoom)
         : User(nameVal), lecturerID(id), office(officeRoom) {}
@@ -21,24 +22,34 @@ std::string Lecturer::generateBookingID() {
 }
 
 bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float endTime) {
+    // Check if the room has been deleted
+    auto search = deletedRooms.find(room->getUniqueRoomID());
+    if (search != deletedRooms.end()) {
+        //std::cout << "Cannot book. The room has been deleted. Room ID: " << room->getUniqueRoomID() << "\n";
+        return false;
+    } else {
+        std::cout << "Room ID " << room->getUniqueRoomID() << " not found in deleted rooms.\n";
+    }
+
+    // Check if the room is available for the requested time slot
     if (room->isAvailable(startTime, endTime)) {
+        // Create a new booking
         auto roomSharedPtr = room->getSharedPtr();
         if (!roomSharedPtr) {
-            std::cerr << "Failed to get shared pointer for room." << std::endl;
             return false;
         }
 
         auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, roomSharedPtr);
-        room->addBooking(newBooking.get()); // Pass the raw pointer
-        bookings.push_back(newBooking); // Store the shared_ptr
-
-        globalAdmin.addPendingBooking(newBooking);
+        roomSharedPtr->addBooking(newBooking); // Add booking to the room
+        bookings.push_back(newBooking); // Add booking to lecturer's list of bookings
+        globalAdmin.addPendingBooking(newBooking); // Add booking to admin's pending bookings
         return true;
     } else {
-        std::cout << "Room is not available for the requested time slot." << std::endl;
+        //std::cout << "Room is not available for the requested time slot. Room ID: " << room->getUniqueRoomID() << std::endl;
         return false;
     }
 }
+
 
 bool Lecturer::cancelBooking(const std::string& bookingID) {
     auto it = std::find_if(bookings.begin(), bookings.end(), [&](const std::shared_ptr<Booking>& booking) {
@@ -50,13 +61,13 @@ bool Lecturer::cancelBooking(const std::string& bookingID) {
         (*it)->markInvalid();
 
         // Remove the booking from the room's booking list
-        (*it)->getRoom()->removeBooking(it->get()); // Pass raw pointer to Room
+        (*it)->getRoom()->removeBooking(*it); // Pass the shared_ptr directly
 
         // Erase the booking from the lecturer's list of bookings
         bookings.erase(it);
         return true;
     } else {
-        std::cout << "Booking with ID " << bookingID << " not found." << std::endl;
+        //std::cout << "Booking with ID " << bookingID << " not found." << std::endl;
         return false;
     }
 }
@@ -74,4 +85,3 @@ std::vector<Room*> Lecturer::searchRoomsByCapacity(const std::vector<Room*>& all
 std::string Lecturer::getName() const {
     return name;
 }
-

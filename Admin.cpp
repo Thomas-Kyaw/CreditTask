@@ -1,31 +1,47 @@
 #include "Admin.h"
-#include "Room.h"
+class Room;
 #include "Building.h"
 #include <iostream>
 #include <algorithm>
 #include <memory>
+#include "Globals.h"
 
 Admin::Admin(const std::string &nameVal) : User(nameVal) {}
 
 std::shared_ptr<Building> Admin::getBuilding(const std::string& buildingCode) {
+    //std::cout << "Accessing building: " << buildingCode << "\n";
     auto it = buildings.find(buildingCode);
     if (it != buildings.end()) {
+        //std::cout << "Building found: " << buildingCode << "\n";
         return it->second;
     } else {
+        std::cout << "Building not found, creating new: " << buildingCode << "\n";
         auto newBuilding = std::make_shared<Building>(buildingCode);
         buildings[buildingCode] = newBuilding;
+        std::cout << "Building created and added: " << buildingCode << "\n";
         return newBuilding;
     }
 }
 
+void Admin::addBuilding(std::shared_ptr<Building> building) {
+    std::string buildingCode = building->getBuildingCode(); // Assumed getter for building code
+    if (buildings.find(buildingCode) == buildings.end()) {
+        buildings[buildingCode] = building;
+        std::cout << "Building added to Admin: " << buildingCode << "\n";
+    } else {
+        std::cout << "Building already exists in Admin: " << buildingCode << "\n";
+    }
+}
+
 void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity) {
+    std::cout << "Adding room: " << roomNumber << " to building: " << buildingCode << "\n";
     auto buildingIt = buildings.find(buildingCode);
     if (buildingIt != buildings.end()) {
         auto& building = buildingIt->second;
-        building->addRoom(roomNumber, capacity); // Assuming addRoom in Building takes roomNumber and capacity
+        building->addRoom(roomNumber, capacity);
+        std::cout << "Room added: " << roomNumber << "\n";
     } else {
-        // Handle the case where the building does not exist
-        std::cerr << "Building with code " << buildingCode << " not found." << std::endl;
+        std::cerr << "Failed to add room. Building with code " << buildingCode << " not found.\n";
     }
 }
 
@@ -40,23 +56,20 @@ void Admin::editRoom(const std::string& buildingCode, const std::string& roomNum
 }
 
 void Admin::deleteRoom(const std::string& buildingCode, const std::string& roomNumber) {
-    auto building = buildings.find(buildingCode);
-    if (building != buildings.end()) {
-        auto room = building->second->findRoom(roomNumber);
+    std::cout << "Deleting room: " << roomNumber << " from building: " << buildingCode << "\n";
+    auto buildingIt = buildings.find(buildingCode);
+    if (buildingIt != buildings.end()) {
+        auto& building = buildingIt->second;
+        auto room = building->findRoom(roomNumber);
         if (room) {
-            room->notifyBookingsRoomDeletion();
-        }
-        building->second->deleteRoom(roomNumber);
-
-        // Debugging: Check if the room still exists after deletion
-        room = building->second->findRoom(roomNumber);
-        if (room) {
-            std::cout << "Room " << roomNumber << " still exists in building " << buildingCode << "." << std::endl;
+            deletedRooms.insert(room->getUniqueRoomID());
+            building->deleteRoom(roomNumber);
+            std::cout << "Room deleted: " << roomNumber << "\n";
         } else {
-            std::cout << "Room " << roomNumber << " successfully deleted from building " << buildingCode << "." << std::endl;
+            std::cout << "Room " << roomNumber << " not found in building " << buildingCode << ".\n";
         }
     } else {
-        std::cout << "Building " << buildingCode << " not found." << std::endl;
+        std::cout << "Building " << buildingCode << " not found for deletion.\n";
     }
 }
 
@@ -111,12 +124,15 @@ std::shared_ptr<Booking> Admin::findBooking(const std::string& bookingID) {
 }
 
 void Admin::deleteBuilding(const std::string& buildingCode) {
+    //std::cout << "Deleting building: " << buildingCode << "\n";
     auto it = buildings.find(buildingCode);
     if (it != buildings.end()) {
+        it->second->deleteAllRooms();
         buildings.erase(it);
-        std::cout << "Building " << buildingCode << " has been deleted." << std::endl;
+        std::cout << "Building deleted: " << buildingCode << "\n";
     } else {
-        std::cout << "Building " << buildingCode << " not found." << std::endl;
+        std::cout << "Building " << buildingCode << " not found for deletion.\n";
     }
 }
+
 

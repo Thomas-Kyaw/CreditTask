@@ -24,7 +24,8 @@ public:
     void deleteRoom(const std::string& roomNumber); // Deletes the room with the specified number
     std::shared_ptr<Room> getRoomSharedPtr(const std::string& roomNumber); // Returns a shared pointer to the specified room
     size_t getRoomCount() const; // Returns the count of rooms in the building
-
+    void deleteAllRooms();
+    std::string getBuildingCode() {return buildingCode;}
     // ... Other methods
 };
 

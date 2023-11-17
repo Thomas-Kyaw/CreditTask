@@ -4,8 +4,11 @@
 #include <stdexcept>
 #include <iostream>
 #include <memory>
+#include "Globals.h"
 
-Building::Building(const std::string& code) : buildingCode(code) {}
+Building::Building(const std::string& code) : buildingCode(code) {
+
+}
 
 void Building::addRoom(const std::string& roomNumber, int capacity) {
     auto sharedBuildingPtr = shared_from_this(); // Get a shared_ptr to this Building
@@ -45,6 +48,7 @@ void Building::deleteRoom(const std::string& roomNumber) {
         return room->getRoomNumber() == roomNumber;
     });
     if (it != rooms.end()) {
+        deletedRooms.insert((*it)->getUniqueRoomID());
         rooms.erase(it);
         std::cout << "Room " << roomNumber << " deleted from building " << buildingCode << "." << std::endl;
     } else {
@@ -73,6 +77,14 @@ std::shared_ptr<Room> Building::getRoomSharedPtr(const std::string& roomNumber) 
 
 size_t Building::getRoomCount() const {
     return rooms.size(); // Assuming 'rooms' is the container holding the rooms
+}
+
+void Building::deleteAllRooms() {
+    for (const auto& room : rooms) {
+        deletedRooms.insert(room->getUniqueRoomID());
+    }
+    rooms.clear();
+    std::cout << "All rooms deleted lmfao" << std::endl;
 }
 
 // ... Other method implementations as needed
