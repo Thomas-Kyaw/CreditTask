@@ -5,17 +5,16 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
 #include "BuildingTest.h"
-// Comment out other test suite headers
 #include "RoomTest.h"
 #include "ClassroomTest.h"
 #include "ComputerLabTest.h"
 #include "MeetingRoomTest.h"
 
-
-/*int main() {
+//comment out the main inside main.cpp before running
+int main() {
     CppUnit::TextUi::TestRunner runner;
-    runner.addTest(ClassroomTest::suite());
+    runner.addTest(ClassroomTest::suite()); // change "ClassroomTest" to the name beside the header extension
     bool wasSuccessful = runner.run("", false);
     return wasSuccessful ? 0 : 1;
-}*/
+}
 
