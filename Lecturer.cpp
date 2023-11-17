@@ -28,7 +28,7 @@ bool Lecturer::bookRoom(Room* room, Subject* subject, const std::string& date, f
         //std::cout << "Cannot book. The room has been deleted. Room ID: " << room->getUniqueRoomID() << "\n";
         return false;
     } else {
-        std::cout << "Room ID " << room->getUniqueRoomID() << " not found in deleted rooms.\n";
+        //std::cout << "Room ID " << room->getUniqueRoomID() << " not found in deleted rooms.\n";
     }
 
     // Check if the room is available for the requested time slot

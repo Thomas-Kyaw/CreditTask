@@ -6,95 +6,208 @@
 #include "Globals.h"
 #include <iostream>
 #include <memory>
+#include <string>
+#include <vector>
+#include <limits>
 
-/*int main() {
-    // Create a building and register it with the Admin
-    auto buildingPtr = std::make_shared<Building>("B1");
-    globalAdmin.addBuilding(buildingPtr); // Ensure the building is added to the Admin
+// Forward declarations for functions
+void adminActions(Admin& admin, std::vector<std::shared_ptr<Building>>& buildings);
+void lecturerActions(Lecturer& lecturer, const std::vector<std::shared_ptr<Building>>& buildings);
+Subject subject("CS101", "Computer Science");
+Subject subjectq("ECE101", "Electronics Engineering");
+void flushCin();
 
-    // Add rooms to the building
-    buildingPtr->addRoom("R101", 30);
-    buildingPtr->addRoom("R102", 40);
-    buildingPtr->addRoom("R103", 50);
+int main() {
+    // Initial Setup
+    std::cout << "Room Booking System\n";
+    std::cout << "1. Admin\n";
+    std::cout << "2. Lecturer\n";
+    std::cout << "Select your role: ";
 
-    // Debug: Print unique room IDs
-    std::cout << "Unique Room IDs:\n";
-    std::cout << "R101 ID: " << buildingPtr->getRoomSharedPtr("R101")->getUniqueRoomID() << "\n";
-    std::cout << "R102 ID: " << buildingPtr->getRoomSharedPtr("R102")->getUniqueRoomID() << "\n";
-    std::cout << "R103 ID: " << buildingPtr->getRoomSharedPtr("R103")->getUniqueRoomID() << "\n";
+    int role;
+    std::cin >> role;
+    flushCin();  // Clear any lingering input
 
-    // Create a lecturer and subject
+    // Predetermined data setup
+    std::vector<std::shared_ptr<Building>> buildings;
+    for (int i = 1; i <= 6; ++i) {
+        auto buildingPtr = std::make_shared<Building>("B" + std::to_string(i));
+        globalAdmin.addBuilding(buildingPtr);
+        buildingPtr->addRoom("R" + std::to_string(i * 100 + 1), 30 + i * 5);  // Example: R101, R102, ...
+        buildings.push_back(buildingPtr);
+    }
+
     Lecturer lecturer("Dr. Smith", "Lec1", nullptr);
-    Subject subject("CS101", "Computer Science");
 
-    // Lecturer makes bookings
-    auto room101 = buildingPtr->getRoomSharedPtr("R101");
-    auto room102 = buildingPtr->getRoomSharedPtr("R102");
-    auto room103 = buildingPtr->getRoomSharedPtr("R103");
-
-    // Attempt bookings
-    std::cout << "Attempting to book Room 101...\n";
-    lecturer.bookRoom(room101.get(), &subject, 9.0f, 10.0f);
-
-    std::cout << "Attempting to book Room 102...\n";
-    lecturer.bookRoom(room102.get(), &subject, 10.0f, 11.0f);
-
-    std::cout << "Attempting to book Room 103...\n";
-    lecturer.bookRoom(room103.get(), &subject, 11.0f, 12.0f);
-
-    // Attempt to book room101 again for the same time slot
-    std::cout << "Attempting to book Room 101 again...\n";
-    bool bookingResult = lecturer.bookRoom(room101.get(), &subject, 9.0f, 10.0f);
-    if (!bookingResult) {
-        std::cout << "Failed to book room R101 for the same time slot. Room is not available.\n";
-    }
-
-    // Display booking details
-    std::cout << "Booking Details After Making Bookings:\n";
-    for (const auto& booking : lecturer.getBookings()) {
-        std::cout << booking->getDetails() << std::endl;
-    }
-
-    // Lecturer cancels one booking
-    std::cout << "Cancelling booking BKG2...\n";
-    lecturer.cancelBooking("BKG2");
-
-    // Admin actions
-    std::cout << "Admin approving and rejecting bookings...\n";
-    globalAdmin.approveBooking("BKG1");
-    globalAdmin.rejectBooking("BKG3");
-
-    // Display updated booking details
-    std::cout << "\nBooking Details After Admin Actions:\n";
-    for (const auto& booking : lecturer.getBookings()) {
-        std::cout << booking->getDetails() << std::endl;
-    }
-
-    // Delete a room and attempt to book it
-    std::cout << "Admin deleting Room 102...\n";
-    globalAdmin.deleteRoom("B1", "R102");
-
-    // Debug: Print deleted rooms set
-    std::cout << "Deleted Rooms: ";
-    for (auto id : deletedRooms) {
-        std::cout << id << " ";
-    }
-    std::cout << "\n";
-
-    // Lecturer attempts to book the deleted room
-    std::cout << "Attempting to book deleted Room 102...\n";
-    bool bookingSuccess = lecturer.bookRoom(room102.get(), &subject, 13.0f, 14.0f);
-    if (bookingSuccess) {
-        std::cout << "Successfully booked the deleted room. This should not happen.\n";
-    } else {
-        std::cout << "Failed to book the deleted room. \n";
-    }
-
-    // Display updated booking details
-    std::cout << "\nBooking Details After Attempting to Book Deleted Room:\n";
-    for (const auto& booking : lecturer.getBookings()) {
-        std::cout << booking->getDetails() << std::endl;
+    // Role selection
+    switch (role) {
+        case 1:
+            adminActions(globalAdmin, buildings);
+            break;
+        case 2:
+            lecturerActions(lecturer, buildings);
+            break;
+        default:
+            std::cout << "Invalid role selected. Exiting...\n";
+            break;
     }
 
     return 0;
-}*/
+}
+
+void adminActions(Admin& admin, std::vector<std::shared_ptr<Building>>& buildings) {
+    // Implement the Admin specific actions here
+    int choice;
+    do {
+        std::cout << "\nAdmin Actions:\n";
+        std::cout << "1. Add Room\n";
+        std::cout << "2. Edit Room\n";
+        std::cout << "3. Delete Room\n";
+        std::cout << "4. Approve Booking\n";
+        std::cout << "5. Reject Booking\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Enter choice: ";
+        std::cin >> choice;
+        flushCin();
+
+        switch (choice) {
+            case 1: {
+                // Add Room logic
+                std::string buildingCode, roomNumber;
+                int capacity;
+                std::cout << "Enter building code: ";
+                std::cin >> buildingCode;
+                std::cout << "Enter room number: ";
+                std::cin >> roomNumber;
+                std::cout << "Enter room capacity: ";
+                std::cin >> capacity;
+                admin.addRoom(buildingCode, roomNumber, capacity);
+                break;
+            }
+            case 2: {
+                // Edit Room logic
+                std::string buildingCode, roomNumber;
+                int newCapacity;
+                std::cout << "Enter building code: ";
+                std::cin >> buildingCode;
+                std::cout << "Enter room number: ";
+                std::cin >> roomNumber;
+                std::cout << "Enter new room capacity: ";
+                std::cin >> newCapacity;
+                admin.editRoom(buildingCode, roomNumber, newCapacity);
+                break;
+            }
+            case 3: {
+                // Delete Room logic
+                std::string buildingCode, roomNumber;
+                std::cout << "Enter building code: ";
+                std::cin >> buildingCode;
+                std::cout << "Enter room number: ";
+                std::cin >> roomNumber;
+                admin.deleteRoom(buildingCode, roomNumber);
+                break;
+            }
+            case 4: {
+                // Approve Booking logic
+                std::string bookingID;
+                std::cout << "Enter booking ID to approve: ";
+                std::cin >> bookingID;
+                admin.approveBooking(bookingID);
+                break;
+            }
+            case 5: {
+                // Reject Booking logic
+                std::string bookingID;
+                std::cout << "Enter booking ID to reject: ";
+                std::cin >> bookingID;
+                admin.rejectBooking(bookingID);
+                break;
+            }
+        }
+    } while (choice != 0);
+}
+
+void lecturerActions(Lecturer& lecturer, const std::vector<std::shared_ptr<Building>>& buildings) {
+    // Implement Lecturer specific actions here
+    int choice;
+    do {
+        std::cout << "\nLecturer Actions:\n";
+        std::cout << "1. Book Room\n";
+        std::cout << "2. Cancel Booking\n";
+        std::cout << "3. Search Room\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Enter choice: ";
+        std::cin >> choice;
+        flushCin();
+
+        switch (choice) {
+            case 1: {
+                // Book Room logic
+                std::string buildingCode, roomNumber, date;
+                float startTime, endTime;
+                std::cout << "Enter building code: ";
+                std::cin >> buildingCode;
+                std::cout << "Enter room number: ";
+                std::cin >> roomNumber;
+                std::cout << "Enter date (YYYY-MM-DD): ";
+                std::cin >> date;
+                std::cout << "Enter start time: ";
+                std::cin >> startTime;
+                std::cout << "Enter end time: ";
+                std::cin >> endTime;
+
+                auto building = globalAdmin.getBuilding(buildingCode);
+                if (building) {
+                    Room* room = building->findRoom(roomNumber);
+                    if (room) {
+                        if (lecturer.bookRoom(room, &subject, date, startTime, endTime)) {
+                            std::cout << "Room booked successfully.\n";
+                        } else {
+                            std::cout << "Failed to book room.\n";
+                        }
+                    } else {
+                        std::cout << "Room not found.\n";
+                    }
+                } else {
+                    std::cout << "Building not found.\n";
+                }
+                break;
+            }
+            case 2: {
+                // Cancel Booking logic
+                std::string bookingID;
+                std::cout << "Enter booking ID to cancel: ";
+                std::cin >> bookingID;
+                if (lecturer.cancelBooking(bookingID)) {
+                    std::cout << "Booking cancelled successfully.\n";
+                } else {
+                    std::cout << "Failed to cancel booking.\n";
+                }
+                break;
+            }
+            case 3: {
+                // Search Room logic
+                int capacity;
+                std::cout << "Enter required room capacity: ";
+                std::cin >> capacity;
+
+                std::vector<Room*> suitableRooms;
+                for (const auto& building : buildings) {
+                    auto rooms = lecturer.searchRoomsByCapacity(building->getAllRooms(), capacity);
+                    suitableRooms.insert(suitableRooms.end(), rooms.begin(), rooms.end());
+                }
+
+                std::cout << "Suitable rooms:\n";
+                for (const auto& room : suitableRooms) {
+                    std::cout << room->GetDetails() << "\n";
+                }
+                break;
+            }
+        }
+    } while (choice != 0);
+}
+
+void flushCin() {
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.clear();
+}

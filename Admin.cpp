@@ -27,7 +27,7 @@ void Admin::addBuilding(std::shared_ptr<Building> building) {
     std::string buildingCode = building->getBuildingCode(); // Assumed getter for building code
     if (buildings.find(buildingCode) == buildings.end()) {
         buildings[buildingCode] = building;
-        std::cout << "Building added to Admin: " << buildingCode << "\n";
+        //std::cout << "Building added to Admin: " << buildingCode << "\n";
     } else {
         std::cout << "Building already exists in Admin: " << buildingCode << "\n";
     }

@@ -26,6 +26,7 @@ public:
     size_t getRoomCount() const; // Returns the count of rooms in the building
     void deleteAllRooms();
     std::string getBuildingCode() {return buildingCode;}
+    std::vector<Room*> getAllRooms() const;
     // ... Other methods
 };
 

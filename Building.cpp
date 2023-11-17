@@ -87,4 +87,11 @@ void Building::deleteAllRooms() {
     std::cout << "All rooms deleted lmfao" << std::endl;
 }
 
+std::vector<Room*> Building::getAllRooms() const {
+    std::vector<Room*> allRooms;
+    for (const auto& room : rooms) {
+        allRooms.push_back(room.get());
+    }
+    return allRooms;
+}
 // ... Other method implementations as needed
