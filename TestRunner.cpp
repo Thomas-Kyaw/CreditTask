@@ -13,7 +13,7 @@
 //comment out the main inside main.cpp before running
 int main() {
     CppUnit::TextUi::TestRunner runner;
-    runner.addTest(ClassroomTest::suite()); // change "ClassroomTest" to the name beside the header extension
+    runner.addTest(RoomTest::suite()); // change "ClassroomTest" to the name beside the header extension
     bool wasSuccessful = runner.run("", false);
     return wasSuccessful ? 0 : 1;
 }

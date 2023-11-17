@@ -27,13 +27,17 @@ Room::~Room() {
     bookings.clear();*/
 }
 
-bool Room::isAvailable(float desiredStartTime, float desiredEndTime) const {
+bool Room::isAvailable(const std::string& desiredDate, float desiredStartTime, float desiredEndTime) const {
     for (const auto& booking : bookings) {
-        if (!(desiredEndTime <= booking->getStartTime() || desiredStartTime >= booking->getEndTime())) {
-            return false;
+        // Check if the booking is on the same date
+        if (booking->getBookingDate() == desiredDate) {
+            // Check if the time slots overlap
+            if (!(desiredEndTime <= booking->getStartTime() || desiredStartTime >= booking->getEndTime())) {
+                return false; // Time slots overlap on the same date
+            }
         }
     }
-    return true;
+    return true; // No overlapping bookings found on the desired date
 }
 
 void Room::addBooking(std::shared_ptr<Booking> booking) {

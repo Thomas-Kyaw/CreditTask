@@ -16,7 +16,7 @@ private:
     std::map<std::string, std::shared_ptr<Building>> buildings;
 
     // Vector storing pending bookings as shared pointers
-    std::vector<std::shared_ptr<Booking>> pendingBookings;
+    std::vector<std::shared_ptr<Booking>> Bookings;
 
 public:
     // Constructor for Admin, taking name as a parameter
@@ -32,7 +32,7 @@ public:
     void rejectBooking(const std::string& bookingID);
 
     void addPendingBooking(std::shared_ptr<Booking> booking) {
-        pendingBookings.push_back(booking);
+        Bookings.push_back(booking);
     }
 
     void addBuilding(std::shared_ptr<Building> building);

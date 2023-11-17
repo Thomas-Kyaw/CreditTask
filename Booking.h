@@ -16,6 +16,7 @@ private:
     std::string bookingID; // Unique identifier for the booking
     std::string roomNumber; // Number of the room booked
     BookingStatus status; // Current status of the booking
+    std::string bookingDate; // Date of the booking
     float startTime; // Start time of the booking
     float endTime; // End time of the booking
     Lecturer* lecturer; // Pointer to the Lecturer who made the booking
@@ -25,7 +26,7 @@ private:
 
 public:
     // Constructor
-    Booking(const std::string& id, const std::string& roomNum, float start, float end, Lecturer* lec, Subject* subj, std::shared_ptr<Room> rm);
+    Booking(const std::string& id, const std::string& roomNum, const std::string& date, float start, float end, Lecturer* lec, Subject* subj, std::shared_ptr<Room> rm);
 
     // Update booking when room is deleted
     void updateOnRoomDeletion();
@@ -52,6 +53,10 @@ public:
             return roomPtr.get();
         }
         return nullptr; // Room has been deleted
+    }
+
+    std::string getBookingDate() const {
+        return bookingDate;
     }
 
     // Mutators

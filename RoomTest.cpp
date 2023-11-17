@@ -20,17 +20,17 @@ public:
         Subject subject("CS101", "Computer Science");
 
         // Check availability before adding any bookings
-        CPPUNIT_ASSERT(room->isAvailable(9.0f, 10.0f));
+        CPPUNIT_ASSERT(room->isAvailable("2023-10-2", 9.0f, 10.0f));
 
         // Create a booking and add it to the room
-        auto booking = std::make_shared<Booking>("B1-R101-9-10", "R101", 9.0f, 11.0f, &lecturer, &subject, room);
+        auto booking = std::make_shared<Booking>("B1-R101-9-10", "R101","2023-10-2", 9.0f, 11.0f, &lecturer, &subject, room);
         room->addBooking(booking);
 
         // Check availability during the time of the booking
-        CPPUNIT_ASSERT(!room->isAvailable(9.0f, 10.0f));
+        CPPUNIT_ASSERT(!room->isAvailable("2023-10-2", 9.0f, 10.0f));
 
         // Check availability outside the time of the booking
-        CPPUNIT_ASSERT(room->isAvailable(11.0f, 12.0f));
+        CPPUNIT_ASSERT(room->isAvailable("2023-10-2", 11.0f, 12.0f));
     }
 
 
@@ -41,14 +41,14 @@ public:
         Subject subject("CS101", "Computer Science");
 
         // Create and add booking
-        auto booking1 = std::make_shared<Booking>("B1-R101-9-10", "R101", 9.0f, 10.0f, &lecturer, &subject, room);
+        auto booking1 = std::make_shared<Booking>("B1-R101-9-10", "R101", "2023-10-2", 9.0f, 10.0f, &lecturer, &subject, room);
         room->addBooking(booking1);
 
-        CPPUNIT_ASSERT(!room->isAvailable(9.0f, 10.0f));
+        CPPUNIT_ASSERT(!room->isAvailable("2023-10-2", 9.0f, 10.0f));
 
         // Remove booking and check availability
         room->removeBooking(booking1);
-        CPPUNIT_ASSERT(room->isAvailable(9.0f, 10.0f));
+        CPPUNIT_ASSERT(room->isAvailable("2023-10-2", 9.0f, 10.0f));
     }
 };
 CPPUNIT_TEST_SUITE_REGISTRATION(RoomTest);

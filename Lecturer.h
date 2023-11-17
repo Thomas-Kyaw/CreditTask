@@ -31,7 +31,7 @@ public:
     // Method to generate a unique booking ID
     std::string generateBookingID();
     // Method to book a room
-    bool bookRoom(Room* room, Subject* subject, float startTime, float endTime);
+    bool bookRoom(Room* room, Subject* subject, const std::string& date, float startTime, float endTime);
     // Method to cancel a booking
     bool cancelBooking(const std::string& bookingID);
     // Method to search for rooms by their capacity

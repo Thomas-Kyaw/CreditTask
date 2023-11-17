@@ -77,24 +77,24 @@ void Admin::approveBooking(const std::string& bookingID) {
     std::cout << "Attempting to approve booking ID: " << bookingID << std::endl;
     auto booking = findBooking(bookingID);
     if (booking && booking->getStatus() == BookingStatus::PENDING) {
-        // Temporarily comment out the room availability check for debugging
-        // auto room = findRoom(booking->getRoomNumber());
-        // if (room && room->isAvailable(booking->getStartTime(), booking->getEndTime())) {
-        booking->setStatus(BookingStatus::APPROVED);
-        std::cout << "Booking " << bookingID << " approved." << std::endl;
-        // ...
+        auto room = findRoom(booking->getRoomNumber());
+        if (room && room->isAvailable(booking->getBookingDate(), booking->getStartTime(), booking->getEndTime())) {
+            booking->setStatus(BookingStatus::APPROVED);
+            std::cout << "Booking " << bookingID << " approved." << std::endl;
+        } else {
+            std::cout << "Room is not available at the requested date and time." << std::endl;
+        }
     } else {
         std::cout << "Booking ID not found or not pending." << std::endl;
     }
 }
-
 
 void Admin::rejectBooking(const std::string& bookingID) {
     auto booking = findBooking(bookingID);
     if (booking) {
         booking->setStatus(BookingStatus::REJECTED);
         // Remove from pendingBookings
-        pendingBookings.erase(std::remove(pendingBookings.begin(), pendingBookings.end(), booking), pendingBookings.end());
+        Bookings.erase(std::remove(Bookings.begin(), Bookings.end(), booking), Bookings.end());
         std::cout << "Booking with ID " << bookingID << " has been rejected." << std::endl;
     } else {
         std::cout << "Booking with ID " << bookingID << " not found." << std::endl;
@@ -113,10 +113,10 @@ Room* Admin::findRoom(const std::string& roomNumber) {
 
 
 std::shared_ptr<Booking> Admin::findBooking(const std::string& bookingID) {
-    auto it = std::find_if(pendingBookings.begin(), pendingBookings.end(),
+    auto it = std::find_if(Bookings.begin(), Bookings.end(),
                            [&](const std::shared_ptr<Booking>& booking) { return booking->getBookingID() == bookingID; });
 
-    if (it != pendingBookings.end()) {
+    if (it != Bookings.end()) {
         return *it;
     }
 

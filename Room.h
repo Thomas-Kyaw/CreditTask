@@ -32,7 +32,8 @@ public:
     unsigned int getUniqueRoomID() const;
 
     // Check if room is available during the desired time
-    bool isAvailable(float desiredStartTime, float desiredEndTime) const;
+    bool isAvailable(const std::string& desiredDate, float desiredStartTime, float desiredEndTime) const;
+
     // Add a booking to this room
     //void addBooking(Booking* booking);
     void addBooking(std::shared_ptr<Booking> booking);

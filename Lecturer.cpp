@@ -21,7 +21,7 @@ std::string Lecturer::generateBookingID() {
     return ss.str();
 }
 
-bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float endTime) {
+bool Lecturer::bookRoom(Room* room, Subject* subject, const std::string& date, float startTime, float endTime) {
     // Check if the room has been deleted
     auto search = deletedRooms.find(room->getUniqueRoomID());
     if (search != deletedRooms.end()) {
@@ -32,14 +32,14 @@ bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float end
     }
 
     // Check if the room is available for the requested time slot
-    if (room->isAvailable(startTime, endTime)) {
+    if (room->isAvailable(date, startTime, endTime)) {
         // Create a new booking
         auto roomSharedPtr = room->getSharedPtr();
         if (!roomSharedPtr) {
             return false;
         }
 
-        auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), startTime, endTime, this, subject, roomSharedPtr);
+        auto newBooking = std::make_shared<Booking>(generateBookingID(), room->getRoomNumber(), date, startTime, endTime, this, subject, roomSharedPtr);
         roomSharedPtr->addBooking(newBooking); // Add booking to the room
         bookings.push_back(newBooking); // Add booking to lecturer's list of bookings
         globalAdmin.addPendingBooking(newBooking); // Add booking to admin's pending bookings
@@ -49,7 +49,6 @@ bool Lecturer::bookRoom(Room* room, Subject* subject, float startTime, float end
         return false;
     }
 }
-
 
 bool Lecturer::cancelBooking(const std::string& bookingID) {
     auto it = std::find_if(bookings.begin(), bookings.end(), [&](const std::shared_ptr<Booking>& booking) {
