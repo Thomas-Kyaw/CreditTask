@@ -32,8 +32,7 @@ int main() {
     std::vector<std::shared_ptr<Building>> buildings;
     for (int i = 1; i <= 6; ++i) {
         auto buildingPtr = std::make_shared<Building>("B" + std::to_string(i));
-        globalAdmin.addBuilding(buildingPtr);
-        buildingPtr->addRoom("R" + std::to_string(i * 100 + 1), 30 + i * 5);  // Example: R101, R102, ...
+        globalAdmin.addBuilding(buildingPtr);// Example: R101, R102, ...
         buildings.push_back(buildingPtr);
     }
 
@@ -87,16 +86,7 @@ void adminActions(Admin& admin, std::vector<std::shared_ptr<Building>>& building
 
         switch (choice) {
             case 1: {
-                // Add Room logic
-                std::string buildingCode, roomNumber;
-                int capacity;
-                std::cout << "Enter building code: ";
-                std::cin >> buildingCode;
-                std::cout << "Enter room number: ";
-                std::cin >> roomNumber;
-                std::cout << "Enter room capacity: ";
-                std::cin >> capacity;
-                admin.addRoom(buildingCode, roomNumber, capacity);
+                admin.addRoom();
                 break;
             }
             case 2: {

@@ -23,8 +23,8 @@ public:
     Admin(const std::string &name);
 
     // Methods for room management
-    void addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity);
-    void editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity);
+    void addRoom();
+        void editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity);
     void deleteRoom(const std::string& buildingCode, const std::string& roomNumber);
 
     // Methods for booking management

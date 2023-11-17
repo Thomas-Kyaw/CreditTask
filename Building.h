@@ -18,7 +18,8 @@ public:
     Building(const std::string& code); // Initializes a building with a given code
 
     // Room management methods
-    void addRoom(const std::string& roomNumber, int capacity); // Adds a room with specified number and capacity
+    //void addRoom(const std::string& roomNumber, int capacity); // Adds a room with specified number and capacity
+    void addRoom(std::shared_ptr<Room> room);
     void editRoom(const std::string& roomNumber, int newCapacity); // Edits the capacity of a specified room
     Room* findRoom(const std::string& roomNumber); // Finds and returns a raw pointer to the room with the specified number
     void deleteRoom(const std::string& roomNumber); // Deletes the room with the specified number

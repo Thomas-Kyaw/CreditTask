@@ -37,17 +37,27 @@ void Admin::addBuilding(std::shared_ptr<Building> building) {
     }
 }
 
-void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumber, int capacity) {
-
-    std::cout << "Select room type (1: Classroom, 2: Computer Lab, 3: Meeting Room): ";
-    int roomType;
-    std::cin >> roomType;
-
+void Admin::addRoom() {
+    std::string buildingCode;
+    std::cout << "Enter building code: ";
+    std::cin >> buildingCode;
     std::shared_ptr<Building> building = getBuilding(buildingCode);
     if (!building) {
         std::cout << "Building not found.\n";
         return;
     }
+
+    std::string roomNumber;
+    int capacity;
+    std::cout << "Enter room number: ";
+    std::cin >> roomNumber;
+    std::cout << "Enter room capacity: ";
+    std::cin >> capacity;
+
+    std::cout << "Select room type (1: Classroom, 2: Computer Lab, 3: Meeting Room): ";
+    int roomType;
+    std::cin >> roomType;
+    std::shared_ptr<Room> newRoom;
 
     switch (roomType) {
         case 1: { // Classroom
@@ -55,8 +65,7 @@ void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumb
             int type;
             std::cin >> type;
             ClassroomType classroomType = (type == 1) ? ClassroomType::LectureRoom : ClassroomType::TutorialRoom;
-            auto newRoom = std::make_shared<Classroom>(building, roomNumber, capacity, classroomType);
-            building->addRoom(roomNumber, capacity);
+            newRoom = std::make_shared<Classroom>(building, roomNumber, capacity, classroomType);
             break;
         }
         case 2: { // Computer Lab
@@ -74,8 +83,7 @@ void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumb
             bool hasPrintingFacility;
             std::cin >> hasPrintingFacility;
 
-            auto newRoom = std::make_shared<ComputerLab>(building, roomNumber, capacity, operatingSystem, softwareInstalled, hasPrintingFacility);
-            building->addRoom(roomNumber, capacity);
+            newRoom = std::make_shared<ComputerLab>(building, roomNumber, capacity, operatingSystem, softwareInstalled, hasPrintingFacility);
             break;
         }
         case 3: { // Meeting Room
@@ -93,13 +101,13 @@ void Admin::addRoom(const std::string& buildingCode, const std::string& roomNumb
             std::string seatingArrangement;
             std::getline(std::cin, seatingArrangement);
 
-            auto newRoom = std::make_shared<MeetingRoom>(building, roomNumber, capacity, hasConferenceCallEquipment, hasWhiteboard);
-            building->addRoom(roomNumber, capacity);
+            newRoom = std::make_shared<MeetingRoom>(building, roomNumber, capacity, hasConferenceCallEquipment, hasWhiteboard);
             break;
         }
         default:
             std::cout << "Invalid room type selected.\n";
     }
+    building->addRoom(newRoom);
 }
 
 void Admin::editRoom(const std::string& buildingCode, const std::string& roomNumber, int newCapacity) {

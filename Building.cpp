@@ -10,15 +10,14 @@ Building::Building(const std::string& code) : buildingCode(code) {
 
 }
 
-void Building::addRoom(const std::string& roomNumber, int capacity) {
-    auto sharedBuildingPtr = shared_from_this(); // Get a shared_ptr to this Building
-    auto room = std::make_shared<Room>(sharedBuildingPtr, roomNumber, capacity);
-    // Check if the room already exists and add it to the list
+void Building::addRoom(std::shared_ptr<Room> room) {
     auto it = std::find_if(rooms.begin(), rooms.end(), [&](const std::shared_ptr<Room>& existingRoom) {
         return existingRoom->getRoomNumber() == room->getRoomNumber();
     });
     if (it == rooms.end()) {
-        rooms.push_back(room); // No need to use std::move
+        rooms.push_back(room);
+    } else {
+        throw std::runtime_error("Room already exists.");
     }
 }
 
